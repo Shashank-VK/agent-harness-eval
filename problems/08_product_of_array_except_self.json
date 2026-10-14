@@ -1,0 +1,81 @@
+{
+  "id": "product_of_array_except_self",
+  "title": "Product of Array Except Self",
+  "difficulty": "Medium",
+  "topic": "array",
+  "statement": "Given an integer array nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i]. The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer. You must write an algorithm that runs in O(n) time and without using division.",
+  "function_name": "product_except_self",
+  "function_signature": "def product_except_self(nums: list[int]) -> list[int]:",
+  "hidden_tests": [
+    {
+      "input": {
+        "nums": [
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      "expected": [
+        24,
+        12,
+        8,
+        6
+      ]
+    },
+    {
+      "input": {
+        "nums": [
+          -1,
+          1,
+          0,
+          -3,
+          3
+        ]
+      },
+      "expected": [
+        0,
+        0,
+        9,
+        0,
+        0
+      ]
+    },
+    {
+      "input": {
+        "nums": [
+          2,
+          3
+        ]
+      },
+      "expected": [
+        3,
+        2
+      ]
+    },
+    {
+      "input": {
+        "nums": [
+          0,
+          0
+        ]
+      },
+      "expected": [
+        0,
+        0
+      ]
+    },
+    {
+      "input": {
+        "nums": [
+          1,
+          -1
+        ]
+      },
+      "expected": [
+        -1,
+        1
+      ]
+    }
+  ]
+}

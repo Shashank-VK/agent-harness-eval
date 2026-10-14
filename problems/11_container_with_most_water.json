@@ -1,0 +1,72 @@
+{
+  "id": "container_with_most_water",
+  "title": "Container With Most Water",
+  "difficulty": "Medium",
+  "topic": "two-pointer",
+  "statement": "You are given an integer array height of length n. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]). Find two lines that together with the x-axis form a container, such that the container contains the most water. Return the maximum amount of water a container can store.",
+  "function_name": "max_area",
+  "function_signature": "def max_area(height: list[int]) -> int:",
+  "hidden_tests": [
+    {
+      "input": {
+        "height": [
+          1,
+          8,
+          6,
+          2,
+          5,
+          4,
+          8,
+          3,
+          7
+        ]
+      },
+      "expected": 49
+    },
+    {
+      "input": {
+        "height": [
+          1,
+          1
+        ]
+      },
+      "expected": 1
+    },
+    {
+      "input": {
+        "height": [
+          4,
+          3,
+          2,
+          1,
+          4
+        ]
+      },
+      "expected": 16
+    },
+    {
+      "input": {
+        "height": [
+          1,
+          2,
+          1
+        ]
+      },
+      "expected": 2
+    },
+    {
+      "input": {
+        "height": [
+          2,
+          3,
+          4,
+          5,
+          18,
+          17,
+          6
+        ]
+      },
+      "expected": 17
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "id": "valid_palindrome",
+  "title": "Valid Palindrome",
+  "difficulty": "Easy",
+  "topic": "two-pointer",
+  "statement": "A phrase is a palindrome if, after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters, it reads the same forward and backward. Alphanumeric characters include letters and numbers. Given a string s, return True if it is a palindrome, or False otherwise.",
+  "function_name": "is_palindrome",
+  "function_signature": "def is_palindrome(s: str) -> bool:",
+  "hidden_tests": [
+    {
+      "input": {
+        "s": "A man, a plan, a canal: Panama"
+      },
+      "expected": true
+    },
+    {
+      "input": {
+        "s": "race a car"
+      },
+      "expected": false
+    },
+    {
+      "input": {
+        "s": " "
+      },
+      "expected": true
+    },
+    {
+      "input": {
+        "s": "0P"
+      },
+      "expected": false
+    },
+    {
+      "input": {
+        "s": "ab_a"
+      },
+      "expected": true
+    }
+  ]
+}

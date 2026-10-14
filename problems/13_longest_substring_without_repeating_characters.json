@@ -1,0 +1,41 @@
+{
+  "id": "longest_substring_without_repeating_characters",
+  "title": "Longest Substring Without Repeating Characters",
+  "difficulty": "Medium",
+  "topic": "string",
+  "statement": "Given a string s, find the length of the longest substring without repeating characters.",
+  "function_name": "length_of_longest_substring",
+  "function_signature": "def length_of_longest_substring(s: str) -> int:",
+  "hidden_tests": [
+    {
+      "input": {
+        "s": "abcabcbb"
+      },
+      "expected": 3
+    },
+    {
+      "input": {
+        "s": "bbbbb"
+      },
+      "expected": 1
+    },
+    {
+      "input": {
+        "s": "pwwkew"
+      },
+      "expected": 3
+    },
+    {
+      "input": {
+        "s": ""
+      },
+      "expected": 0
+    },
+    {
+      "input": {
+        "s": "dvdf"
+      },
+      "expected": 3
+    }
+  ]
+}

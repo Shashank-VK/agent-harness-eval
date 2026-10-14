@@ -1,0 +1,53 @@
+{
+  "id": "valid_parentheses",
+  "title": "Valid Parentheses",
+  "difficulty": "Easy",
+  "topic": "stack",
+  "statement": "Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid. An input string is valid if open brackets are closed by the same type of brackets and in the correct order, and every close bracket has a corresponding open bracket of the same type.",
+  "function_name": "is_valid_parentheses",
+  "function_signature": "def is_valid_parentheses(s: str) -> bool:",
+  "hidden_tests": [
+    {
+      "input": {
+        "s": "()"
+      },
+      "expected": true
+    },
+    {
+      "input": {
+        "s": "()[]{}"
+      },
+      "expected": true
+    },
+    {
+      "input": {
+        "s": "(]"
+      },
+      "expected": false
+    },
+    {
+      "input": {
+        "s": "([)]"
+      },
+      "expected": false
+    },
+    {
+      "input": {
+        "s": "{[]}"
+      },
+      "expected": true
+    },
+    {
+      "input": {
+        "s": "["
+      },
+      "expected": false
+    },
+    {
+      "input": {
+        "s": ""
+      },
+      "expected": true
+    }
+  ]
+}
