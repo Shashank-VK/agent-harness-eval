@@ -1,0 +1,932 @@
+[
+  {
+    "problem_id": "two_sum",
+    "problem_title": "Two Sum",
+    "difficulty": "Easy",
+    "topic": "array",
+    "strategy": "cot",
+    "passed": true,
+    "failure_category": null,
+    "latency_seconds": 33.04,
+    "tokens_used": 1209,
+    "prompt_tokens": 461,
+    "completion_tokens": 748,
+    "extracted_code": "def two_sum(nums: list[int], target: int) -> list[int]:\n    \"\"\"\n    Return the indices of the two numbers that add up to target.\n    The returned indices satisfy index1 < index2.\n\n    Parameters\n    ----------\n    nums : list[int]\n        List of integers.\n    target : int\n        Desired sum.\n\n    Returns\n    -------\n    list[int]\n        A list containing the two indices in ascending order.\n    \"\"\"\n    # maps number -> its index (the first occurrence)\n    seen = {}\n    for index, number in enumerate(nums):\n        complement = target - number\n        if complement in seen:\n            return [seen[complement], index]\n        # store the current number's index for later look\u2011ups\n        seen[number] = index\n    # As per guarantees, this point is never reached\n    raise ValueError(\"No two sum solution found\")",
+    "raw_response": "**Step\u2011by\u2011step reasoning**\n\n1. **Goal** \u2013 find two distinct indices `i < j` such that `nums[i] + nums[j] == target`.\n2. **Naive approach** \u2013 check every pair; `O(n\u00b2)` time, not efficient.\n3. **Fast approach** \u2013 walk through the list once while remembering which numbers we have already seen.\n   * While iterating, for the current number `x` at index `i` compute `needed = target - x`.\n   * If `needed` has already appeared, its stored index is `j`.  \n     Then `j < i`, so the pair `[j, i]` satisfies the ordering requirement.\n   * If `needed` is not present, store `x` with its index for future look\u2011ups.\n4. **Complexities**\n   * Time: each element processed once \u2192 `O(n)`.\n   * Extra space: the hash map stores up to `n` entries \u2192 `O(n)`.\n5. **Edge cases**\n   * Duplicate numbers: the map keeps only the first occurrence, which is fine because\n     the problem guarantees a unique solution.\n   * Negative numbers, zero, or large integers: no special handling needed.\n   * Empty/size\u20111 list: will never hit the return; the problem guarantees a solution,\n     so such inputs are out of scope.\n6. **Result order** \u2013 by design the first index found (`j`) is always smaller than the\n   current index (`i`); thus `[j, i]` is already the required order.\n\n---\n\n```python\ndef two_sum(nums: list[int], target: int) -> list[int]:\n    \"\"\"\n    Return the indices of the two numbers that add up to target.\n    The returned indices satisfy index1 < index2.\n\n    Parameters\n    ----------\n    nums : list[int]\n        List of integers.\n    target : int\n        Desired sum.\n\n    Returns\n    -------\n    list[int]\n        A list containing the two indices in ascending order.\n    \"\"\"\n    # maps number -> its index (the first occurrence)\n    seen = {}\n    for index, number in enumerate(nums):\n        complement = target - number\n        if complement in seen:\n            return [seen[complement], index]\n        # store the current number's index for later look\u2011ups\n        seen[number] = index\n    # As per guarantees, this point is never reached\n    raise ValueError(\"No two sum solution found\")\n```\n\nThis implementation adheres to the required time and space complexities and correctly handles the ordering constraint.",
+    "error_message": null,
+    "test_outcomes": [
+      {
+        "test_index": 0,
+        "passed": true,
+        "actual": [
+          0,
+          1
+        ],
+        "expected": [
+          0,
+          1
+        ]
+      },
+      {
+        "test_index": 1,
+        "passed": true,
+        "actual": [
+          1,
+          2
+        ],
+        "expected": [
+          1,
+          2
+        ]
+      },
+      {
+        "test_index": 2,
+        "passed": true,
+        "actual": [
+          0,
+          1
+        ],
+        "expected": [
+          0,
+          1
+        ]
+      },
+      {
+        "test_index": 3,
+        "passed": true,
+        "actual": [
+          2,
+          4
+        ],
+        "expected": [
+          2,
+          4
+        ]
+      },
+      {
+        "test_index": 4,
+        "passed": true,
+        "actual": [
+          0,
+          3
+        ],
+        "expected": [
+          0,
+          3
+        ]
+      }
+    ]
+  },
+  {
+    "problem_id": "valid_parentheses",
+    "problem_title": "Valid Parentheses",
+    "difficulty": "Easy",
+    "topic": "stack",
+    "strategy": "cot",
+    "passed": true,
+    "failure_category": null,
+    "latency_seconds": 12.944,
+    "tokens_used": 1003,
+    "prompt_tokens": 460,
+    "completion_tokens": 543,
+    "extracted_code": "def is_valid_parentheses(s: str) -> bool:\n    \"\"\"\n    Determines whether the input string s consisting of\n    '(', ')', '{', '}', '[' and ']' is a valid parenthesized expression.\n    \"\"\"\n    # Mapping from closing to opening brackets\n    matching = {')': '(', '}': '{', ']': '['}\n    stack: list[str] = []\n\n    for ch in s:\n        if ch in matching.values():            # opening bracket\n            stack.append(ch)\n        else:                                  # closing bracket\n            if not stack or stack[-1] != matching[ch]:\n                return False\n            stack.pop()\n\n    return not stack",
+    "raw_response": "**Idea**\n\nWe scan the string from left to right and keep a *stack* of the opening brackets we have seen but not yet matched.\n\n- When we read an opening bracket (`(`, `{`, `[`), we push it onto the stack.  \n- When we read a closing bracket (`)`, `}`, `]`) we have two possibilities:  \n  * the stack is empty \u2192 there is no matching opening bracket \u2192 the string is invalid.  \n  * the stack is not empty \u2192 pop the top element and check that it is the corresponding opening bracket.  \n  If it is not the right pair, the string is also invalid.\n\nAfter scanning the whole string the string is valid **iff** the stack is empty, meaning every opening bracket had a matching closing bracket in the correct order.\n\n---\n\n**Edge cases**\n\n1. Empty string \u2192 valid (nothing to match).  \n2. String starting with a closing bracket \u2192 invalid immediately (stack empty).  \n3. String ending with an opening bracket \u2192 invalid (stack contains unmatched openings).  \n4. Mixed brackets of different types in a correct nesting order (e.g. `\"({[]})\"`) \u2192 valid.\n\n---\n\n**Complexity**\n\n- Time: every character is processed once \u2192 **O(n)**, where *n* is `len(s)`.  \n- Space: the stack holds at most all opening brackets \u2192 **O(n)** in the worst case (string of all `(`).\n\n---\n\n**Implementation**\n\n```python\ndef is_valid_parentheses(s: str) -> bool:\n    \"\"\"\n    Determines whether the input string s consisting of\n    '(', ')', '{', '}', '[' and ']' is a valid parenthesized expression.\n    \"\"\"\n    # Mapping from closing to opening brackets\n    matching = {')': '(', '}': '{', ']': '['}\n    stack: list[str] = []\n\n    for ch in s:\n        if ch in matching.values():            # opening bracket\n            stack.append(ch)\n        else:                                  # closing bracket\n            if not stack or stack[-1] != matching[ch]:\n                return False\n            stack.pop()\n\n    return not stack\n```\n\nThe function follows the explained algorithm, handling all the discussed edge cases, and uses only standard Python collections.",
+    "error_message": null,
+    "test_outcomes": [
+      {
+        "test_index": 0,
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "test_index": 1,
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "test_index": 2,
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "test_index": 3,
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "test_index": 4,
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "test_index": 5,
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "test_index": 6,
+        "passed": true,
+        "actual": true,
+        "expected": true
+      }
+    ]
+  },
+  {
+    "problem_id": "best_time_to_buy_and_sell_stock",
+    "problem_title": "Best Time to Buy and Sell Stock",
+    "difficulty": "Easy",
+    "topic": "array",
+    "strategy": "cot",
+    "passed": true,
+    "failure_category": null,
+    "latency_seconds": 16.883,
+    "tokens_used": 1161,
+    "prompt_tokens": 472,
+    "completion_tokens": 689,
+    "extracted_code": "def max_profit(prices: list[int]) -> int:\n    \"\"\"\n    Return the maximum profit achievable from a single buy\u2013sell\n    transaction on these stock prices.  If no profit can be made,\n    returns 0.\n    \"\"\"\n    best_profit = 0\n    min_price = float('inf')\n\n    for price in prices:\n        if price < min_price:\n            min_price = price\n        else:\n            profit = price - min_price\n            if profit > best_profit:\n                best_profit = profit\n\n    return best_profit",
+    "raw_response": "**Step\u2011by\u2011step reasoning**\n\n1. **Goal**  \n   For every day `i` we could buy the stock at that day and sell it later at a higher price.  \n   We want the largest difference `prices[j] - prices[i]` where `j > i`.\n\n2. **Observations**  \n   - The best selling price for each day `i` depends only on the minimum price seen *before* day `i`.  \n   - While scanning the list from left to right we can keep two running values:  \n     * `min_price` \u2013 the cheapest price among all days seen so far,  \n     * `best_profit` \u2013 the maximum profit found up to the current position.\n\n3. **Algorithm**  \n   ```text\n   initialise best_profit = 0\n   initialise min_price = +\u221e\n\n   for each price in prices:\n       if price < min_price:\n           min_price = price               # new cheaper buying day\n       else:\n           profit = price - min_price      # potential profit on this day\n           if profit > best_profit:\n               best_profit = profit\n   return best_profit\n   ```\n\n4. **Edge cases**  \n   * Empty list or list with a single element \u2192 no transaction possible \u2192 profit 0.  \n   * All prices descending \u2192 profit never increases \u2192 return 0.  \n   * Negative prices are allowed by the problem statement; the same logic applies.\n\n5. **Complexities**  \n   *Time*: One pass through the array, `O(n)`.  \n   *Space*: Only a few variables, `O(1)`.\n\n---\n\n```python\ndef max_profit(prices: list[int]) -> int:\n    \"\"\"\n    Return the maximum profit achievable from a single buy\u2013sell\n    transaction on these stock prices.  If no profit can be made,\n    returns 0.\n    \"\"\"\n    best_profit = 0\n    min_price = float('inf')\n\n    for price in prices:\n        if price < min_price:\n            min_price = price\n        else:\n            profit = price - min_price\n            if profit > best_profit:\n                best_profit = profit\n\n    return best_profit\n```\n",
+    "error_message": null,
+    "test_outcomes": [
+      {
+        "test_index": 0,
+        "passed": true,
+        "actual": 5,
+        "expected": 5
+      },
+      {
+        "test_index": 1,
+        "passed": true,
+        "actual": 0,
+        "expected": 0
+      },
+      {
+        "test_index": 2,
+        "passed": true,
+        "actual": 4,
+        "expected": 4
+      },
+      {
+        "test_index": 3,
+        "passed": true,
+        "actual": 2,
+        "expected": 2
+      },
+      {
+        "test_index": 4,
+        "passed": true,
+        "actual": 0,
+        "expected": 0
+      }
+    ]
+  },
+  {
+    "problem_id": "valid_anagram",
+    "problem_title": "Valid Anagram",
+    "difficulty": "Easy",
+    "topic": "string",
+    "strategy": "cot",
+    "passed": true,
+    "failure_category": null,
+    "latency_seconds": 11.389,
+    "tokens_used": 1009,
+    "prompt_tokens": 451,
+    "completion_tokens": 558,
+    "extracted_code": "from collections import Counter\n\ndef is_anagram(s: str, t: str) -> bool:\n    \"\"\"Return True iff t is an anagram of s.\"\"\"\n    if len(s) != len(t):\n        return False\n\n    counter = Counter(s)\n    for char in t:\n        if counter[char] == 0:\n            return False\n        counter[char] -= 1\n\n    # optional: check that all counts are zero\n    return all(v == 0 for v in counter.values())",
+    "raw_response": "**Idea**\n\nTwo strings are anagrams when they contain exactly the same multiset of characters.  \nSo we just need to compare the frequency of every character in each string.\n\n**Step\u2011by\u2011step logic**\n\n1. If the lengths differ, they can\u2019t be anagrams \u2013 return `False`.\n2. Count how many times each character appears in `s`.  \n   A dictionary (or `collections.Counter`) works well for this.\n3. Decrement the counts while iterating over `t`.  \n   * If we try to decrement a key that doesn\u2019t exist or reaches a negative value, an anagram condition is broken \u2013 return `False`.\n4. After the loop, all counts should be zero, otherwise some extra character remained \u2013 return `False`.\n5. If none of the checks failed, return `True`.\n\n**Edge cases**\n\n* Empty strings \u2013 they\u2019re trivially anagrams.  \n* Strings of different length \u2013 handled in step\u202f1.  \n* Unicode characters (e.g., emojis) \u2013 the algorithm works the same because dictionary keys can be any hashable type.  \n* Case sensitivity \u2013 the function treats characters literally; if you want case\u2011insensitive comparison, convert both strings first (`s.lower()`, `t.lower()`).\n\n**Complexities**\n\n* Time:\u202fO(n) where *n* is the length of the strings (we scan each once).  \n* Space:\u202fO(k) where *k* is the number of distinct characters (\u2264\u202falphabet size).\n\n---\n\n```python\nfrom collections import Counter\n\ndef is_anagram(s: str, t: str) -> bool:\n    \"\"\"Return True iff t is an anagram of s.\"\"\"\n    if len(s) != len(t):\n        return False\n\n    counter = Counter(s)\n    for char in t:\n        if counter[char] == 0:\n            return False\n        counter[char] -= 1\n\n    # optional: check that all counts are zero\n    return all(v == 0 for v in counter.values())\n```",
+    "error_message": null,
+    "test_outcomes": [
+      {
+        "test_index": 0,
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "test_index": 1,
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "test_index": 2,
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "test_index": 3,
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "test_index": 4,
+        "passed": true,
+        "actual": true,
+        "expected": true
+      }
+    ]
+  },
+  {
+    "problem_id": "valid_palindrome",
+    "problem_title": "Valid Palindrome",
+    "difficulty": "Easy",
+    "topic": "two-pointer",
+    "strategy": "cot",
+    "passed": true,
+    "failure_category": null,
+    "latency_seconds": 18.475,
+    "tokens_used": 1168,
+    "prompt_tokens": 451,
+    "completion_tokens": 717,
+    "extracted_code": "def is_palindrome(s: str) -> bool:\n    \"\"\"\n    Return True if the given string s is a palindrome when ignoring\n    case and all non\u2011alphanumeric characters, otherwise False.\n\n    Args:\n        s: A string potentially containing spaces, punctuation, etc.\n\n    Returns:\n        bool: True if s is a palindrome, False otherwise.\n    \"\"\"\n    # Step 1: Build a cleaned, lowercase version containing only alphanumerics.\n    cleaned = [ch.lower() for ch in s if ch.isalnum()]\n\n    # Step 2: Two\u2011pointer palindrome check.\n    i, j = 0, len(cleaned) - 1\n    while i < j:\n        if cleaned[i] != cleaned[j]:\n            return False\n        i += 1\n        j -= 1\n\n    return True",
+    "raw_response": "**Approach**\n\n1. **Normalize the string**  \n   * Scan through `s`.  \n   * Keep only characters that satisfy `c.isalnum()`.  \n   * Convert them to lower\u2011case (`c.lower()`).\n\n2. **Check palindrome**  \n   * Two\u2011pointer scan on the cleaned string:  \n     * `i` starts at the leftmost index, `j` at the rightmost.  \n     * While `i < j`, compare `clean[i]` and `clean[j]`.  \n     * If mismatch \u2192 return `False`.  \n   * If loop finishes \u2192 return `True`.\n\n**Time Complexity**\n\n* Cleaning the string: each character examined once \u2192 **O(n)**, where `n` is `len(s)`.  \n* Two\u2011pointer check: at most `n/2` comparisons \u2192 **O(n)**.  \n* Total: **O(n)**.\n\n**Space Complexity**\n\n* The cleaned string stores at most `n` characters \u2192 **O(n)**.  \n* Aside from that, only constant extra space is used.\n\n**Edge Cases**\n\n| Case | Why it matters | Result |\n|------|----------------|--------|\n| Empty string | No characters to compare | \u2705 (empty string is a palindrome) |\n| Only non\u2011alphanumeric | Cleaned string becomes empty | \u2705 |\n| Mixed case letters | Must be case\u2011insensitive | Normalized to lower case |\n| Numbers included | `isalnum()` accepts digits | Treat them like letters |\n| Very long string | Linear time ensures scalability | Works within memory limits |\n\n---\n\n```python\ndef is_palindrome(s: str) -> bool:\n    \"\"\"\n    Return True if the given string s is a palindrome when ignoring\n    case and all non\u2011alphanumeric characters, otherwise False.\n\n    Args:\n        s: A string potentially containing spaces, punctuation, etc.\n\n    Returns:\n        bool: True if s is a palindrome, False otherwise.\n    \"\"\"\n    # Step 1: Build a cleaned, lowercase version containing only alphanumerics.\n    cleaned = [ch.lower() for ch in s if ch.isalnum()]\n\n    # Step 2: Two\u2011pointer palindrome check.\n    i, j = 0, len(cleaned) - 1\n    while i < j:\n        if cleaned[i] != cleaned[j]:\n            return False\n        i += 1\n        j -= 1\n\n    return True\n```",
+    "error_message": null,
+    "test_outcomes": [
+      {
+        "test_index": 0,
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "test_index": 1,
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "test_index": 2,
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "test_index": 3,
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "test_index": 4,
+        "passed": true,
+        "actual": true,
+        "expected": true
+      }
+    ]
+  },
+  {
+    "problem_id": "maximum_subarray",
+    "problem_title": "Maximum Subarray",
+    "difficulty": "Medium",
+    "topic": "array",
+    "strategy": "cot",
+    "passed": true,
+    "failure_category": null,
+    "latency_seconds": 22.239,
+    "tokens_used": 1333,
+    "prompt_tokens": 431,
+    "completion_tokens": 902,
+    "extracted_code": "def max_sub_array(nums: list[int]) -> int:\n    \"\"\"\n    Returns the sum of the contiguous subarray with the largest sum.\n    Uses Kadane's algorithm: O(n) time, O(1) space.\n\n    Parameters\n    ----------\n    nums : list[int]\n        List of integers (non\u2011empty for meaningful result).\n\n    Returns\n    -------\n    int\n        The largest possible subarray sum.\n\n    Raises\n    ------\n    ValueError\n        If nums is empty.\n    \"\"\"\n    if not nums:\n        raise ValueError(\"Input array must contain at least one element.\")\n\n    best_sum = current_sum = nums[0]\n\n    for x in nums[1:]:\n        # Decide whether to start a new subarray at x or extend the current one.\n        current_sum = max(x, current_sum + x)\n        # Update the global best if the new current_sum is higher.\n        if current_sum > best_sum:\n            best_sum = current_sum\n\n    return best_sum",
+    "raw_response": "The classic \u201cMaximum Subarray\u201d problem is a perfect illustration of a dynamic\u2011programming trick that runs in linear time.  \nBelow is a concise walkthrough followed by a ready\u2011to\u2011copy Python\u202f3 implementation.\n\n---\n\n## What the algorithm does\n\n1. **Traverse the list once**.\n2. Keep two running values:\n   * `current_sum` \u2013 the best (maximum\u2011sum) subarray that ends at the current index.\n   * `best_sum`    \u2013 the best subarray found anywhere so far.\n3. At each element `x`  \n   * Either extend the previous subarray (`current_sum + x`) **or** start a new subarray at `x`.  \n     Thus `current_sum = max(x, current_sum + x)`.\n   * `best_sum` is updated to `max(best_sum, current_sum)`.\n\nWhen the scan ends, `best_sum` is the answer.\n\n---\n\n## Why it works\n\nFor any position `i`, the subarray that ends at `i` with the maximum sum is either:\n- the single element `nums[i]` itself (if every earlier prefix sum is negative), or\n- the optimal subarray ending at `i\u20111`, extended by `nums[i]`.\n\nBoth possibilities are considered by the `max` in the update, guaranteeing that `current_sum` is always correct.  \nSince `best_sum` remembers the highest `current_sum` observed, it becomes the global optimum.\n\n---\n\n## Complexity analysis\n\n| Measure | Formula | Result |\n|---------|---------|--------|\n| Time    | `O(n)`  | One pass over `nums`. |\n| Space   | `O(1)`  | Only a few scalar variables. |\n\n---\n\n## Edge cases\n\n| Scenario | What happens | Handling |\n|----------|--------------|----------|\n| All negative numbers | `current_sum` and `best_sum` both get the largest (least negative) number. | Correct automatically. |\n| Single element | Loop runs once; `best_sum` equals that element. | Handled naturally. |\n| Empty list | Problem definition assumes at least one element. If empty input passes, we return `0` (or you could raise `ValueError`). | Optional defensive code added. |\n\n---\n\n## Final implementation\n\n```python\ndef max_sub_array(nums: list[int]) -> int:\n    \"\"\"\n    Returns the sum of the contiguous subarray with the largest sum.\n    Uses Kadane's algorithm: O(n) time, O(1) space.\n\n    Parameters\n    ----------\n    nums : list[int]\n        List of integers (non\u2011empty for meaningful result).\n\n    Returns\n    -------\n    int\n        The largest possible subarray sum.\n\n    Raises\n    ------\n    ValueError\n        If nums is empty.\n    \"\"\"\n    if not nums:\n        raise ValueError(\"Input array must contain at least one element.\")\n\n    best_sum = current_sum = nums[0]\n\n    for x in nums[1:]:\n        # Decide whether to start a new subarray at x or extend the current one.\n        current_sum = max(x, current_sum + x)\n        # Update the global best if the new current_sum is higher.\n        if current_sum > best_sum:\n            best_sum = current_sum\n\n    return best_sum\n```\n\nFeel free to plug this into any script, test it with sample data, or adapt it for related problems. Happy coding!",
+    "error_message": null,
+    "test_outcomes": [
+      {
+        "test_index": 0,
+        "passed": true,
+        "actual": 6,
+        "expected": 6
+      },
+      {
+        "test_index": 1,
+        "passed": true,
+        "actual": 1,
+        "expected": 1
+      },
+      {
+        "test_index": 2,
+        "passed": true,
+        "actual": 23,
+        "expected": 23
+      },
+      {
+        "test_index": 3,
+        "passed": true,
+        "actual": -1,
+        "expected": -1
+      },
+      {
+        "test_index": 4,
+        "passed": true,
+        "actual": -1,
+        "expected": -1
+      }
+    ]
+  },
+  {
+    "problem_id": "merge_intervals",
+    "problem_title": "Merge Intervals",
+    "difficulty": "Medium",
+    "topic": "array",
+    "strategy": "cot",
+    "passed": true,
+    "failure_category": null,
+    "latency_seconds": 19.759,
+    "tokens_used": 1079,
+    "prompt_tokens": 455,
+    "completion_tokens": 624,
+    "extracted_code": "def merge_intervals(intervals: list[list[int]]) -> list[list[int]]:\n    \"\"\"\n    Merge all overlapping intervals in a list.\n\n    Parameters\n    ----------\n    intervals : list[list[int]]\n        A list of [start, end] pairs. Each sublist contains two integers.\n\n    Returns\n    -------\n    list[list[int]]\n        A list of non\u2011overlapping intervals covering all input intervals,\n        sorted by start time.\n    \"\"\"\n    if not intervals:\n        return []\n\n    # Step 1: sort by start times\n    intervals.sort(key=lambda x: x[0])\n\n    merged = []\n\n    for start, end in intervals:\n        if not merged or merged[-1][1] < start:\n            # No overlap, keep the interval as is\n            merged.append([start, end])\n        else:\n            # Overlap \u2013 merge with the previous interval\n            merged[-1][1] = max(merged[-1][1], end)\n\n    return merged",
+    "raw_response": "**Solution Outline**\n\n1. **Sort the intervals.**  \n   Sorting by the start value gives us an order where potential overlaps are always between consecutive intervals. Sorting costs `O(n log n)` time.\n\n2. **Iterate through the sorted list and merge.**  \n   Keep a list `merged` containing the intervals we have already processed.  \n   For each new interval `[s, e]`:\n   * If `merged` is empty or the last merged interval ends before `s`, the new interval cannot overlap with the previous one \u2192 append it as a new interval.\n   * Otherwise there is an overlap; merge the two by replacing the last interval with `[prev_start, max(prev_end, e)]`.\n\n   Each interval is examined once, so this pass is `O(n)`.\n\n3. **Return `merged`.**  \n   The resulting list is sorted by start time by construction.\n\n---\n\n### Complexity Analysis\n\n| Step        | Time Complexity | Space Complexity |\n|-------------|-----------------|------------------|\n| Sorting     | `O(n log n)`    | `O(1)` (in\u2011place sorting) |\n| Merging     | `O(n)`          | `O(n)` (output list) |\n\nOverall: **`O(n log n)` time**, **`O(n)` space** for the result.\n\n---\n\n### Edge Cases Handled\n\n- **Empty input** \u2013 return an empty list.\n- **Single interval** \u2013 return that interval unchanged.\n- **Intervals with identical start times** \u2013 sorting preserves them, merging will handle overlaps correctly.\n- **Intervals that touch (end == next_start)** \u2013 considered overlapping (they share a point), so they are merged.\n\n---\n\n```python\ndef merge_intervals(intervals: list[list[int]]) -> list[list[int]]:\n    \"\"\"\n    Merge all overlapping intervals in a list.\n\n    Parameters\n    ----------\n    intervals : list[list[int]]\n        A list of [start, end] pairs. Each sublist contains two integers.\n\n    Returns\n    -------\n    list[list[int]]\n        A list of non\u2011overlapping intervals covering all input intervals,\n        sorted by start time.\n    \"\"\"\n    if not intervals:\n        return []\n\n    # Step 1: sort by start times\n    intervals.sort(key=lambda x: x[0])\n\n    merged = []\n\n    for start, end in intervals:\n        if not merged or merged[-1][1] < start:\n            # No overlap, keep the interval as is\n            merged.append([start, end])\n        else:\n            # Overlap \u2013 merge with the previous interval\n            merged[-1][1] = max(merged[-1][1], end)\n\n    return merged\n```\n\nThis function meets all requirements, correctly merges overlapping intervals, and returns the result in ascending order of start times.",
+    "error_message": null,
+    "test_outcomes": [
+      {
+        "test_index": 0,
+        "passed": true,
+        "actual": [
+          [
+            1,
+            6
+          ],
+          [
+            8,
+            10
+          ],
+          [
+            15,
+            18
+          ]
+        ],
+        "expected": [
+          [
+            1,
+            6
+          ],
+          [
+            8,
+            10
+          ],
+          [
+            15,
+            18
+          ]
+        ]
+      },
+      {
+        "test_index": 1,
+        "passed": true,
+        "actual": [
+          [
+            1,
+            5
+          ]
+        ],
+        "expected": [
+          [
+            1,
+            5
+          ]
+        ]
+      },
+      {
+        "test_index": 2,
+        "passed": true,
+        "actual": [
+          [
+            0,
+            4
+          ]
+        ],
+        "expected": [
+          [
+            0,
+            4
+          ]
+        ]
+      },
+      {
+        "test_index": 3,
+        "passed": true,
+        "actual": [
+          [
+            1,
+            4
+          ]
+        ],
+        "expected": [
+          [
+            1,
+            4
+          ]
+        ]
+      },
+      {
+        "test_index": 4,
+        "passed": true,
+        "actual": [
+          [
+            1,
+            9
+          ]
+        ],
+        "expected": [
+          [
+            1,
+            9
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "problem_id": "product_of_array_except_self",
+    "problem_title": "Product of Array Except Self",
+    "difficulty": "Medium",
+    "topic": "array",
+    "strategy": "cot",
+    "passed": true,
+    "failure_category": null,
+    "latency_seconds": 24.0,
+    "tokens_used": 1400,
+    "prompt_tokens": 466,
+    "completion_tokens": 934,
+    "extracted_code": "def product_except_self(nums: list[int]) -> list[int]:\n    \"\"\"\n    Return an array where each position i contains the product of all numbers\n    in nums except nums[i]. The solution runs in O(n) time and uses no\n    division.\n    \"\"\"\n    n = len(nums)\n    if n == 0:\n        return []\n\n    # Step 1: compute left products\n    answer = [1] * n\n    left_product = 1\n    for i in range(n):\n        answer[i] = left_product\n        left_product *= nums[i]\n\n    # Step 2: multiply with right products\n    right_product = 1\n    for i in range(n - 1, -1, -1):\n        answer[i] *= right_product\n        right_product *= nums[i]\n\n    return answer",
+    "raw_response": "**Idea**\n\nFor each index `i` we need the product of all numbers *except* `nums[i]`.  \nDoing it naively would require ignoring `nums[i]` for every position, which is **O(n\u00b2)**.  \nWe can achieve linear time by *building the product of the left side* and the\nproduct of the right side separately and then multiplying the two.\n\n1. **Left products** \u2013 while scanning the array from left to right keep a running\n   product of all elements seen so far.  \n   `left[i]` will be the product of all elements with index `< i`.  \n2. **Right products** \u2013 scan from right to left, keeping a running product of\n   all elements that come after the current index.  \n   Multiplying the running right\u2011hand product with `left[i]` gives the answer\n   for position `i`.\n\nThe two scans can be merged into one:\n* keep the left product in an output list that we\u2019ll eventually return,\n* keep a separate variable for the right product and update it after each\n  element.\n\nThis gives **O(n)** time, **O(1)** additional space (apart from the output).\n\n**Edge cases**\n\n* Single\u2011element array \u2192 the product of the empty set is conventionally `1`.\n* Empty array \u2192 return an empty list (handled naturally by the loop logic).\n* All zeros or repeated numbers are handled automatically \u2013 the multiplication\n  logic still works.\n\n---\n\n### Algorithm\n\n```\nresult[0] = 1                     # left product for the first element\nright_product = 1                 # product of elements to the right\n\nfor i from 0 to n-1:\n    # multiply current element with the product of all right-side elements\n    result[i] *= right_product\n    right_product *= nums[i]      # add current element to the right product\n```\n\n`result[i]` already holds the left\u2011hand product from the first pass; after the\nloop it is multiplied by the right\u2011hand product.\n\n**Complexities**\n\n* **Time**: one traversal \u2192 **O(n)**  \n* **Space**: output list + one variable \u2192 **O(n)** total, **O(1)** extra\n\n---\n\n```python\ndef product_except_self(nums: list[int]) -> list[int]:\n    \"\"\"\n    Return an array where each position i contains the product of all numbers\n    in nums except nums[i]. The solution runs in O(n) time and uses no\n    division.\n    \"\"\"\n    n = len(nums)\n    if n == 0:\n        return []\n\n    # Step 1: compute left products\n    answer = [1] * n\n    left_product = 1\n    for i in range(n):\n        answer[i] = left_product\n        left_product *= nums[i]\n\n    # Step 2: multiply with right products\n    right_product = 1\n    for i in range(n - 1, -1, -1):\n        answer[i] *= right_product\n        right_product *= nums[i]\n\n    return answer\n```\n\nFeel free to test it with a few cases:\n\n```python\nprint(product_except_self([1, 2, 3, 4]))   # \u279c [24, 12, 8, 6]\nprint(product_except_self([3, 2, 1]))      # \u279c [2, 3, 6]\nprint(product_except_self([0, 4, 0]))      # \u279c [0, 0, 0]\n```\n\nThe implementation follows the linear\u2011time, constant\u2011space strategy described above.",
+    "error_message": null,
+    "test_outcomes": [
+      {
+        "test_index": 0,
+        "passed": true,
+        "actual": [
+          24,
+          12,
+          8,
+          6
+        ],
+        "expected": [
+          24,
+          12,
+          8,
+          6
+        ]
+      },
+      {
+        "test_index": 1,
+        "passed": true,
+        "actual": [
+          0,
+          0,
+          9,
+          0,
+          0
+        ],
+        "expected": [
+          0,
+          0,
+          9,
+          0,
+          0
+        ]
+      },
+      {
+        "test_index": 2,
+        "passed": true,
+        "actual": [
+          3,
+          2
+        ],
+        "expected": [
+          3,
+          2
+        ]
+      },
+      {
+        "test_index": 3,
+        "passed": true,
+        "actual": [
+          0,
+          0
+        ],
+        "expected": [
+          0,
+          0
+        ]
+      },
+      {
+        "test_index": 4,
+        "passed": true,
+        "actual": [
+          -1,
+          1
+        ],
+        "expected": [
+          -1,
+          1
+        ]
+      }
+    ]
+  },
+  {
+    "problem_id": "longest_consecutive_sequence",
+    "problem_title": "Longest Consecutive Sequence",
+    "difficulty": "Medium",
+    "topic": "hashmap",
+    "strategy": "cot",
+    "passed": true,
+    "failure_category": null,
+    "latency_seconds": 30.638,
+    "tokens_used": 1271,
+    "prompt_tokens": 431,
+    "completion_tokens": 840,
+    "extracted_code": "def longest_consecutive(nums: list[int]) -> int:\n    \"\"\"\n    Return the length of the longest consecutive elements sequence in nums.\n\n    :param nums: list of integers, may contain duplicates or be unsorted\n    :return: length of the longest run of consecutive integers\n    \"\"\"\n    # 1. Build a set for O(1) lookups and to drop duplicates\n    num_set = set(nums)\n    best_length = 0\n\n    # 2. Scan through the set and start counting only from sequence starts\n    for x in num_set:\n        if x - 1 not in num_set:      # only consider beginnings\n            current = 1\n            nxt = x + 1\n            while nxt in num_set:\n                current += 1\n                nxt += 1\n            best_length = max(best_length, current)\n\n    return best_length",
+    "raw_response": "**Idea**\n\nWe need the length of the longest run of consecutive integers that can be formed from the numbers in the input list, regardless of the order in which they appear.  \nThe classic linear\u2011time solution builds a set of all numbers (O(n) time & space) and then, for each number, starts expanding forwards and backwards only if it is the first element of a sequence.\n\n*Why it works*  \nIf `x` is the smallest element of a consecutive block, the block consists of `x, x+1, x+2 \u2026 x+k`.  \nThe algorithm will discover this block when it first hits `x` because:\n- All numbers > `x` in the block are in the set, so it will walk forward from `x`.  \n- `x-1` is *not* in the set, so the walk stops immediately.  \nThus each element of a block is visited exactly once (either as a start point or as a step during expansion). Every number is examined a constant number of times, giving linear overall complexity.\n\n**Edge cases**\n\n| Scenario | Result |\n|---|---|\n| `[]` | 0 |\n| `[1]` | 1 |\n| `[1, 50, 2, 3]` | 3 (sequence `1,2,3`) |\n| `[-1, 0, 1]` | 3 |\n| Duplicates like `[1,2,2,3]` | 3 \u2013 the set removes duplicates automatically |\n\nThe algorithm works for negative numbers and duplicate values because a set stores unique elements only.\n\n**Algorithm (step\u2011by\u2011step)**\n\n1. Put all elements of `nums` into a set `s`.  \n2. Initialise `best = 0`.  \n3. Iterate over every `x` in `s`.  \n   * If `x-1` is not in `s`, `x` is the beginning of a new block.  \n     * Start a counter `curr = 1` and a pointer `y = x+1`.  \n     * While `y` is in `s`, increment `curr` and advance `y`.  \n     * Update `best = max(best, curr)`.  \n4. Return `best`.\n\n**Complexity analysis**\n\n*Time* \u2013  \nBuilding the set: `O(n)`  \nIterating over the set: each element is examined a constant number of times: `O(n)`  \nTotal: **O(n)**\n\n*Space* \u2013  \nThe set holds at most `n` elements: **O(n)** auxiliary space (excluding the input list).\n\n**Python 3 implementation**\n\n```python\ndef longest_consecutive(nums: list[int]) -> int:\n    \"\"\"\n    Return the length of the longest consecutive elements sequence in nums.\n\n    :param nums: list of integers, may contain duplicates or be unsorted\n    :return: length of the longest run of consecutive integers\n    \"\"\"\n    # 1. Build a set for O(1) lookups and to drop duplicates\n    num_set = set(nums)\n    best_length = 0\n\n    # 2. Scan through the set and start counting only from sequence starts\n    for x in num_set:\n        if x - 1 not in num_set:      # only consider beginnings\n            current = 1\n            nxt = x + 1\n            while nxt in num_set:\n                current += 1\n                nxt += 1\n            best_length = max(best_length, current)\n\n    return best_length\n```\n\nYou can now call `longest_consecutive` with any list of integers and it will return the desired length in linear time.",
+    "error_message": null,
+    "test_outcomes": [
+      {
+        "test_index": 0,
+        "passed": true,
+        "actual": 4,
+        "expected": 4
+      },
+      {
+        "test_index": 1,
+        "passed": true,
+        "actual": 9,
+        "expected": 9
+      },
+      {
+        "test_index": 2,
+        "passed": true,
+        "actual": 0,
+        "expected": 0
+      },
+      {
+        "test_index": 3,
+        "passed": true,
+        "actual": 7,
+        "expected": 7
+      },
+      {
+        "test_index": 4,
+        "passed": true,
+        "actual": 3,
+        "expected": 3
+      }
+    ]
+  },
+  {
+    "problem_id": "subarray_sum_equals_k",
+    "problem_title": "Subarray Sum Equals K",
+    "difficulty": "Medium",
+    "topic": "hashmap",
+    "strategy": "cot",
+    "passed": true,
+    "failure_category": null,
+    "latency_seconds": 16.393,
+    "tokens_used": 1163,
+    "prompt_tokens": 441,
+    "completion_tokens": 722,
+    "extracted_code": "def subarray_sum(nums: list[int], k: int) -> int:\n    \"\"\"\n    Return the number of contiguous subarrays whose elements sum to k.\n\n    Parameters\n    ----------\n    nums : list[int]\n        The list of integers to examine.\n    k : int\n        The target sum.\n\n    Returns\n    -------\n    int\n        Count of subarrays summing to k.\n    \"\"\"\n    count = 0\n    prefix = 0\n    freq = {0: 1}          # prefix sum 0 has appeared once (\"empty\" prefix)\n\n    for num in nums:\n        prefix += num\n        count += freq.get(prefix - k, 0)\n        freq[prefix] = freq.get(prefix, 0) + 1\n\n    return count",
+    "raw_response": "The problem asks for the number of contiguous sub\u2011arrays whose elements sum to a given integer `k`.  \nLet `prefix[i]` denote the sum of the first `i` elements (with `prefix[0] = 0`).  \nIf we want the sum of a subarray that starts after index `j` and ends at `i-1` to equal `k`, we need\n\n```\nprefix[i] \u2013 prefix[j] = k\n```\n\nor equivalently\n\n```\nprefix[j] = prefix[i] \u2013 k\n```\n\nSo while scanning the array once we keep a dictionary that maps each seen prefix sum to the number of times it has appeared.  \nWhen we encounter a new prefix value `p`, the number of subarrays ending at the current index that sum to `k` is exactly the number of previous prefixes equal to `p - k`. We add that to the answer and record `p` in the dictionary.  \nThe initial entry `0:1` accounts for subarrays that start at index\u202f0.\n\n---\n\n### Algorithm\n```\ncount = 0\nprefix = 0\nfreq = {0: 1}          # prefix sum 0 has appeared once (\"empty\" prefix)\nfor number in nums:\n    prefix += number\n    count += freq.get(prefix - k, 0)\n    freq[prefix] = freq.get(prefix, 0) + 1\nreturn count\n```\n\n---\n\n### Complexity\n* **Time** \u2013 O(n), n = len(nums), one pass.  \n* **Space** \u2013 O(n) in the worst case for the dictionary (each prefix could be unique).\n\n---\n\n### Edge cases handled\n* Empty list: returns 0 (no sub\u2011arrays).  \n* All negative numbers: works because the algorithm does not rely on positivity.  \n* k equals 0: the initial `0:1` in the dictionary ensures sub\u2011arrays that sum to 0 are counted.\n\n---\n\n```python\ndef subarray_sum(nums: list[int], k: int) -> int:\n    \"\"\"\n    Return the number of contiguous subarrays whose elements sum to k.\n\n    Parameters\n    ----------\n    nums : list[int]\n        The list of integers to examine.\n    k : int\n        The target sum.\n\n    Returns\n    -------\n    int\n        Count of subarrays summing to k.\n    \"\"\"\n    count = 0\n    prefix = 0\n    freq = {0: 1}          # prefix sum 0 has appeared once (\"empty\" prefix)\n\n    for num in nums:\n        prefix += num\n        count += freq.get(prefix - k, 0)\n        freq[prefix] = freq.get(prefix, 0) + 1\n\n    return count\n```\n\nFeel free to test it with various inputs to see the counts match expectations.",
+    "error_message": null,
+    "test_outcomes": [
+      {
+        "test_index": 0,
+        "passed": true,
+        "actual": 2,
+        "expected": 2
+      },
+      {
+        "test_index": 1,
+        "passed": true,
+        "actual": 2,
+        "expected": 2
+      },
+      {
+        "test_index": 2,
+        "passed": true,
+        "actual": 3,
+        "expected": 3
+      },
+      {
+        "test_index": 3,
+        "passed": true,
+        "actual": 1,
+        "expected": 1
+      },
+      {
+        "test_index": 4,
+        "passed": true,
+        "actual": 4,
+        "expected": 4
+      }
+    ]
+  },
+  {
+    "problem_id": "container_with_most_water",
+    "problem_title": "Container With Most Water",
+    "difficulty": "Medium",
+    "topic": "two-pointer",
+    "strategy": "cot",
+    "passed": true,
+    "failure_category": null,
+    "latency_seconds": 19.709,
+    "tokens_used": 1249,
+    "prompt_tokens": 469,
+    "completion_tokens": 780,
+    "extracted_code": "def max_area(height: list[int]) -> int:\n    \"\"\"\n    Return the maximum area of water that can be held between two lines\n    in the array `height`.\n\n    Parameters\n    ----------\n    height : list[int]\n        Heights of vertical lines, indices represent positions on the x\u2011axis.\n\n    Returns\n    -------\n    int\n        Maximum container area.\n    \"\"\"\n    n = len(height)\n    if n < 2:\n        return 0\n\n    left, right = 0, n - 1\n    best = 0\n\n    while left < right:\n        h_left, h_right = height[left], height[right]\n        width = right - left\n        area = width * (h_left if h_left < h_right else h_right)\n        if area > best:\n            best = area\n\n        # Move the pointer that points to the shorter line\n        if h_left < h_right:\n            left += 1\n        else:\n            right -= 1\n\n    return best",
+    "raw_response": "**Idea**\n\nEach element `height[i]` represents a vertical line at position `i`.  \nIf we pick two lines at indices `l` and `r` (`l < r`), the water that can be stored is limited by the shorter line and by the horizontal distance between them:\n\n\\[\n\\text{area}(l,r) = (r-l) \\times \\min(\\text{height}[l], \\text{height}[r])\n\\]\n\nWe need the maximum of this quantity over all pairs.\n\nA brute\u2011force scan of all `O(n\u00b2)` pairs is unnecessary.  \nBecause the area is bounded by the shorter of the two lines, we can safely discard a line that is no taller than a line closer to the centre \u2013 the narrower width will dominate any possible benefit of its height.\n\nThis leads to the classic two\u2011pointer approach:\n\n1. Start with pointers `left = 0` and `right = n-1`.\n2. Compute the area for the current pair and update the best answer.\n3. Move the pointer that points to the shorter line inward (one step closer to the centre).  \n   The taller line is kept for the next comparison because it might pair with a taller line on the other side later.\n4. Repeat until `left` meets `right`.\n\n**Why it works**\n\nAssume `height[left] <= height[right]`.  \nAny container that uses a line at `right` and some line `k` with `left < k < right` has width `k-left` which is strictly smaller than `right-left`.  \nBecause the left line is the limiting height, moving left inward guarantees we consider a potentially larger area; moving right inward would only shrink the width and use a line that is at least as tall, so it can never improve the area.\n\nThus the two\u2011pointer walk examines all promising candidates and never skips the optimum.\n\n**Complexities**\n\n- Time: `O(n)` \u2013 each pointer moves at most `n` times.\n- Space: `O(1)` \u2013 only a few integer variables.\n\n**Edge cases**\n\n- Empty list or one element: return `0` (no container).\n- All heights equal: algorithm still works, simply keeps moving pointers.\n- Negative or zero heights: a line of height `0` produces area `0`; algorithm handles it naturally.\n\n---\n\n```python\ndef max_area(height: list[int]) -> int:\n    \"\"\"\n    Return the maximum area of water that can be held between two lines\n    in the array `height`.\n\n    Parameters\n    ----------\n    height : list[int]\n        Heights of vertical lines, indices represent positions on the x\u2011axis.\n\n    Returns\n    -------\n    int\n        Maximum container area.\n    \"\"\"\n    n = len(height)\n    if n < 2:\n        return 0\n\n    left, right = 0, n - 1\n    best = 0\n\n    while left < right:\n        h_left, h_right = height[left], height[right]\n        width = right - left\n        area = width * (h_left if h_left < h_right else h_right)\n        if area > best:\n            best = area\n\n        # Move the pointer that points to the shorter line\n        if h_left < h_right:\n            left += 1\n        else:\n            right -= 1\n\n    return best\n```\n\nThis straightforward implementation follows the reasoning above and satisfies the required time and space constraints.",
+    "error_message": null,
+    "test_outcomes": [
+      {
+        "test_index": 0,
+        "passed": true,
+        "actual": 49,
+        "expected": 49
+      },
+      {
+        "test_index": 1,
+        "passed": true,
+        "actual": 1,
+        "expected": 1
+      },
+      {
+        "test_index": 2,
+        "passed": true,
+        "actual": 16,
+        "expected": 16
+      },
+      {
+        "test_index": 3,
+        "passed": true,
+        "actual": 2,
+        "expected": 2
+      },
+      {
+        "test_index": 4,
+        "passed": true,
+        "actual": 17,
+        "expected": 17
+      }
+    ]
+  },
+  {
+    "problem_id": "trapping_rain_water",
+    "problem_title": "Trapping Rain Water",
+    "difficulty": "Hard",
+    "topic": "two-pointer",
+    "strategy": "cot",
+    "passed": true,
+    "failure_category": null,
+    "latency_seconds": 17.709,
+    "tokens_used": 1160,
+    "prompt_tokens": 424,
+    "completion_tokens": 736,
+    "extracted_code": "def trap(height: list[int]) -> int:\n    \"\"\"\n    Return the total amount of rain water that can be trapped\n    by the bar heights described in 'height'.\n\n    The algorithm runs in linear time and uses constant extra space.\n    \"\"\"\n    if not height or len(height) < 3:\n        return 0\n\n    left, right = 0, len(height) - 1\n    left_max, right_max = height[left], height[right]\n    trapped = 0\n\n    while left < right:\n        if height[left] < height[right]:\n            left += 1\n            left_max = max(left_max, height[left])\n            trapped += max(0, left_max - height[left])\n        else:\n            right -= 1\n            right_max = max(right_max, height[right])\n            trapped += max(0, right_max - height[right])\n\n    return trapped",
+    "raw_response": "**Step\u2011by\u2011step reasoning**\n\n1. **Observation**  \n   For each position `i` the amount of water that can sit above it is limited by the tallest bar on its left and the tallest bar on its right. The water level at `i` equals  \n   `min(max_left[i], max_right[i])`.  \n   The trapped water at `i` is then that level minus the bar height itself.\n\n2. **Na\u00efve approach**  \n   Compute the two arrays `max_left` and `max_right` by scanning the elevation list twice.  \n   *Time*:\u2003`O(n)`  \n   *Space*:\u2003`O(n)` for the two helper arrays.  \n   This works but uses extra memory.\n\n3. **Space\u2011optimised two\u2011pointer method**  \n   Keep two indices, `left` at the start and `right` at the end, and two variables `left_max` and `right_max` that store the maximum bar seen so far from each side.  \n   At each step compare the bar heights at `left` and `right`:\n   - If `height[left]`  <  `height[right]`  \n     * The left side is the limiting side.  \n     * Any water above `height[left]` depends solely on `left_max`.  \n     * Add `left_max - height[left]` (if positive) to the answer, then advance `left` and update `left_max`.  \n   - Else  \n     * Symmetrically handle the right side.  \n   This way we never need the two arrays; only four scalars plus the result.\n\n   *Time*:\u2003`O(n)` \u2013 each index moves at most once.  \n   *Space*:\u2003`O(1)` \u2013 only a few variables.\n\n4. **Edge cases**  \n   - Empty list or a list with fewer than 3 bars \u2192 no water can be trapped \u2192 return `0`.  \n   - All bars of equal height \u2192 no differences, answer `0`.  \n   - Very steep or flat profiles are naturally handled by the algorithm.\n\n---\n\n**Python implementation**\n\n```python\ndef trap(height: list[int]) -> int:\n    \"\"\"\n    Return the total amount of rain water that can be trapped\n    by the bar heights described in 'height'.\n\n    The algorithm runs in linear time and uses constant extra space.\n    \"\"\"\n    if not height or len(height) < 3:\n        return 0\n\n    left, right = 0, len(height) - 1\n    left_max, right_max = height[left], height[right]\n    trapped = 0\n\n    while left < right:\n        if height[left] < height[right]:\n            left += 1\n            left_max = max(left_max, height[left])\n            trapped += max(0, left_max - height[left])\n        else:\n            right -= 1\n            right_max = max(right_max, height[right])\n            trapped += max(0, right_max - height[right])\n\n    return trapped\n```\n\nThis function follows the step\u2011by\u2011step logic above, handling all edge cases, and works in `O(n)` time with `O(1)` additional space.",
+    "error_message": null,
+    "test_outcomes": [
+      {
+        "test_index": 0,
+        "passed": true,
+        "actual": 6,
+        "expected": 6
+      },
+      {
+        "test_index": 1,
+        "passed": true,
+        "actual": 9,
+        "expected": 9
+      },
+      {
+        "test_index": 2,
+        "passed": true,
+        "actual": 1,
+        "expected": 1
+      },
+      {
+        "test_index": 3,
+        "passed": true,
+        "actual": 2,
+        "expected": 2
+      },
+      {
+        "test_index": 4,
+        "passed": true,
+        "actual": 1,
+        "expected": 1
+      }
+    ]
+  },
+  {
+    "problem_id": "longest_substring_without_repeating_characters",
+    "problem_title": "Longest Substring Without Repeating Characters",
+    "difficulty": "Medium",
+    "topic": "string",
+    "strategy": "cot",
+    "passed": true,
+    "failure_category": null,
+    "latency_seconds": 12.193,
+    "tokens_used": 990,
+    "prompt_tokens": 419,
+    "completion_tokens": 571,
+    "extracted_code": "def length_of_longest_substring(s: str) -> int:\n    \"\"\"\n    Return the length of the longest substring of `s` that contains no repeated characters.\n    \"\"\"\n    # Map from character to its most recent index\n    last_seen = {}\n    left = 0          # start of current window\n    max_len = 0\n\n    for right, ch in enumerate(s):\n        # If char seen inside current window, shrink window from left\n        prev_idx = last_seen.get(ch)\n        if prev_idx is not None and prev_idx >= left:\n            left = prev_idx + 1\n\n        # Record current index of character\n        last_seen[ch] = right\n\n        # Update maximum length\n        window_len = right - left + 1\n        if window_len > max_len:\n            max_len = window_len\n\n    return max_len",
+    "raw_response": "**Step\u2011by\u2011step reasoning**\n\n1. **Goal**  \n   Scan the string once and keep track of the longest stretch of characters in which every symbol appears only once.\n\n2. **Sliding window pattern**  \n   - Keep two indices, `left` and `right`, that delimit the current window `[left, right)`.  \n   - Expand `right` one character at a time.  \n   - When the new character `s[right]` is already inside the window, slide `left` forward until the duplicate is removed.  \n   - Update the best length after every successful expansion.\n\n3. **Data structure**  \n   Use a dictionary (or array for ASCII) called `last_seen` that records the last index at which each character appeared.  \n   When encountering a duplicate, you can jump `left` directly to `last_seen[char] + 1` instead of incrementing `left` stepwise, reducing work for repetitive patterns.\n\n4. **Edge cases**  \n   - Empty string \u2192 answer `0`.  \n   - All identical characters (e.g., `\"aaaa\"`) \u2192 answer `1`.  \n   - Mixed ASCII and Unicode \u2013 the dictionary works for any hashable key.\n\n---\n\n**Complexities**\n\n- **Time:**  each character is visited at most twice (once when `right` moves, once when `left` jumps). O(n).  \n- **Space:**  dictionary keeps at most one entry per distinct character. O(min(n,\u202f\u03c3)) where \u03c3 is alphabet size.\n\n---\n\n**Implementation**\n\n```python\ndef length_of_longest_substring(s: str) -> int:\n    \"\"\"\n    Return the length of the longest substring of `s` that contains no repeated characters.\n    \"\"\"\n    # Map from character to its most recent index\n    last_seen = {}\n    left = 0          # start of current window\n    max_len = 0\n\n    for right, ch in enumerate(s):\n        # If char seen inside current window, shrink window from left\n        prev_idx = last_seen.get(ch)\n        if prev_idx is not None and prev_idx >= left:\n            left = prev_idx + 1\n\n        # Record current index of character\n        last_seen[ch] = right\n\n        # Update maximum length\n        window_len = right - left + 1\n        if window_len > max_len:\n            max_len = window_len\n\n    return max_len\n```\n\nThe function runs in linear time and uses a small dictionary, perfectly suited for typical constraints of the problem.",
+    "error_message": null,
+    "test_outcomes": [
+      {
+        "test_index": 0,
+        "passed": true,
+        "actual": 3,
+        "expected": 3
+      },
+      {
+        "test_index": 1,
+        "passed": true,
+        "actual": 1,
+        "expected": 1
+      },
+      {
+        "test_index": 2,
+        "passed": true,
+        "actual": 3,
+        "expected": 3
+      },
+      {
+        "test_index": 3,
+        "passed": true,
+        "actual": 0,
+        "expected": 0
+      },
+      {
+        "test_index": 4,
+        "passed": true,
+        "actual": 3,
+        "expected": 3
+      }
+    ]
+  },
+  {
+    "problem_id": "eval_rpn",
+    "problem_title": "Evaluate Reverse Polish Notation",
+    "difficulty": "Medium",
+    "topic": "stack",
+    "strategy": "cot",
+    "passed": true,
+    "failure_category": null,
+    "latency_seconds": 18.457,
+    "tokens_used": 1359,
+    "prompt_tokens": 461,
+    "completion_tokens": 898,
+    "extracted_code": "def eval_rpn(tokens: list[str]) -> int:\n    \"\"\"\n    Evaluate an expression written in Reverse Polish Notation.\n\n    Each token is either an integer (possibly negative) or one of the four\n    binary operators '+', '-', '*', '/'.\n    Division truncates toward zero as required by the problem statement.\n\n    Time Complexity: O(n), where n is len(tokens).\n    Space Complexity: O(n) for the operand stack.\n    \"\"\"\n    stack = []\n\n    for token in tokens:\n        if token in {\"+\", \"-\", \"*\", \"/\"}:\n            # Pop right first, then left.\n            right = stack.pop()\n            left = stack.pop()\n\n            if token == \"+\":\n                result = left + right\n            elif token == \"-\":\n                result = left - right\n            elif token == \"*\":\n                result = left * right\n            else:  # token == \"/\"\n                # Truncate toward zero\n                result = int(left / right)\n\n            stack.append(result)\n        else:\n            # Convert token to integer and push.\n            stack.append(int(token))\n\n    # After processing all tokens, the result remains on the stack.\n    return stack[0]",
+    "raw_response": "**Step\u2011by\u2011step reasoning**\n\n1. **What the tokens look like**  \n   Each element is either a binary operator (`+`, `\u2013`, `*`, `/`) or an integer (negative/positive).  \n   They are in *post\u2011order* (Reverse Polish Notation).  \n   Example: `[\"2\", \"1\", \"+\", \"3\", \"*\"]`  \u2192  `(2 + 1) * 3 = 9`.\n\n2. **How the evaluation works**  \n   - Scan the tokens from left to right.  \n   - Keep a stack of operands.  \n   - When a number is encountered, push its integer value onto the stack.  \n   - When an operator is encountered, pop the top two operands from the stack (the first pop gives the *right* operand, the second pop gives the *left* operand), apply the operation, and push the result back.\n\n3. **Integer division that truncates toward zero**  \n   Python's `//` performs floor division (towards `-\u221e`), which is **not** what the problem requires.  \n   The easiest way is `int(a / b)` or `math.trunc(a / b)`. E.g.  \n   ```python\n   int(7/2)   # 3\n   int(-7/2)  # -3 (truncate toward zero)\n   ```\n\n4. **Complexity**  \n   Let `n` be the number of tokens.  \n   - Time: Each token is processed once \u2192 **O(n)**.  \n   - Space: The stack holds at most `n` values (worst\u2011case when all tokens are numbers) \u2192 **O(n)**.\n\n5. **Edge cases**  \n   - Empty list: not required by the problem spec, but we can raise an exception or return 0 if desired.  \n   - Single number: stack ends with one element \u2192 correct result.  \n   - Negative numbers and division: handled correctly by `int(a / b)`.\n\n```python\ndef eval_rpn(tokens: list[str]) -> int:\n    \"\"\"\n    Evaluate an expression written in Reverse Polish Notation.\n\n    Each token is either an integer (possibly negative) or one of the four\n    binary operators '+', '-', '*', '/'.\n    Division truncates toward zero as required by the problem statement.\n\n    Time Complexity: O(n), where n is len(tokens).\n    Space Complexity: O(n) for the operand stack.\n    \"\"\"\n    stack = []\n\n    for token in tokens:\n        if token in {\"+\", \"-\", \"*\", \"/\"}:\n            # Pop right first, then left.\n            right = stack.pop()\n            left = stack.pop()\n\n            if token == \"+\":\n                result = left + right\n            elif token == \"-\":\n                result = left - right\n            elif token == \"*\":\n                result = left * right\n            else:  # token == \"/\"\n                # Truncate toward zero\n                result = int(left / right)\n\n            stack.append(result)\n        else:\n            # Convert token to integer and push.\n            stack.append(int(token))\n\n    # After processing all tokens, the result remains on the stack.\n    return stack[0]\n```\n\nFeel free to plug that function into your codebase or test it with the usual LeetCode examples!",
+    "error_message": null,
+    "test_outcomes": [
+      {
+        "test_index": 0,
+        "passed": true,
+        "actual": 9,
+        "expected": 9
+      },
+      {
+        "test_index": 1,
+        "passed": true,
+        "actual": 6,
+        "expected": 6
+      },
+      {
+        "test_index": 2,
+        "passed": true,
+        "actual": 22,
+        "expected": 22
+      },
+      {
+        "test_index": 3,
+        "passed": true,
+        "actual": -1,
+        "expected": -1
+      },
+      {
+        "test_index": 4,
+        "passed": true,
+        "actual": -7,
+        "expected": -7
+      }
+    ]
+  },
+  {
+    "problem_id": "daily_temperatures",
+    "problem_title": "Daily Temperatures",
+    "difficulty": "Medium",
+    "topic": "stack",
+    "strategy": "cot",
+    "passed": true,
+    "failure_category": null,
+    "latency_seconds": 21.212,
+    "tokens_used": 1232,
+    "prompt_tokens": 460,
+    "completion_tokens": 772,
+    "extracted_code": "def daily_temperatures(temperatures: list[int]) -> list[int]:\n    \"\"\"\n    Return an array such that answer[i] is the number of days until a warmer\n    temperature after day i. If none, answer[i] is 0.\n    \"\"\"\n    n = len(temperatures)\n    # result array initialized with zeros\n    answer = [0] * n\n    # stack will store indices of days with temperatures\n    # for which we haven't yet found a warmer future day\n    stack: list[int] = []\n\n    for i, cur_temp in enumerate(temperatures):\n        # Resolve all days waiting for a warmer temperature\n        while stack and cur_temp > temperatures[stack[-1]]:\n            prev_index = stack.pop()\n            answer[prev_index] = i - prev_index\n        # Current day is now waiting for a future warmer temperature\n        stack.append(i)\n\n    # Remaining indices in stack have answer 0 already\n    return answer",
+    "raw_response": "**Step\u2011by\u2011step logic**\n\n1. **Goal** \u2013 For every day `i` we need to know how many later days we must skip until we see a higher temperature.  \n2. **Na\u00efve way** \u2013 For each day scan forward until a warmer day is found.  \n   *Time*: \\(O(n^2)\\) \u2013 far too slow for large inputs.  \n3. **Optimal way** \u2013 Use a *monotonic stack* (actually a stack of indices).  \n   - We traverse the temperatures left\u2011to\u2011right.  \n   - The stack keeps indices of days with temperatures that are **waiting** to find a warmer day.  \n   - The temperatures of indices in the stack are strictly **decreasing** (because whenever a new temperature is higher than the top of the stack we pop).  \n   - When we reach a day `i` with temperature `T`, we pop every index `j` from the stack whose temperature is < `T`.  \n     For each popped index `j` we now know that the next warmer day is `i`, so `answer[j] = i - j`.  \n   - Finally we push `i` onto the stack; it might become the \u201cwaiting\u201d day for the future.\n\n4. **Why it works** \u2013  \n   - Each index is pushed onto the stack once and popped at most once.  \n   - When we pop, the current day is the first future day with a higher temperature, because the stack contains only days with temperatures lower than the current one, and all of them are to the left of `i`.  \n   - Days that remain on the stack at the end never find a warmer day, thus `answer` stays 0 for them.\n\n5. **Edge cases**  \n   - Empty list \u2192 return `[]`.  \n   - All temperatures equal or decreasing \u2192 stack never pops, result is all zeros.  \n   - Single element \u2192 single zero.\n\n6. **Complexities**  \n   - Time: Each index is processed a constant number of times \u2192 **O(n)**.  \n   - Space: Stack holds at most `n` indices \u2192 **O(n)**.\n\n---\n\n**Implementation**\n\n```python\ndef daily_temperatures(temperatures: list[int]) -> list[int]:\n    \"\"\"\n    Return an array such that answer[i] is the number of days until a warmer\n    temperature after day i. If none, answer[i] is 0.\n    \"\"\"\n    n = len(temperatures)\n    # result array initialized with zeros\n    answer = [0] * n\n    # stack will store indices of days with temperatures\n    # for which we haven't yet found a warmer future day\n    stack: list[int] = []\n\n    for i, cur_temp in enumerate(temperatures):\n        # Resolve all days waiting for a warmer temperature\n        while stack and cur_temp > temperatures[stack[-1]]:\n            prev_index = stack.pop()\n            answer[prev_index] = i - prev_index\n        # Current day is now waiting for a future warmer temperature\n        stack.append(i)\n\n    # Remaining indices in stack have answer 0 already\n    return answer\n```\n\n**Quick example**\n\n```python\n>>> daily_temperatures([73, 74, 75, 71, 69, 72, 76, 73])\n[1, 1, 4, 2, 1, 1, 0, 0]\n```\n\nThe function meets the required signature, runs in linear time, uses linear auxiliary space, and handles all edge cases gracefully.",
+    "error_message": null,
+    "test_outcomes": [
+      {
+        "test_index": 0,
+        "passed": true,
+        "actual": [
+          1,
+          1,
+          4,
+          2,
+          1,
+          1,
+          0,
+          0
+        ],
+        "expected": [
+          1,
+          1,
+          4,
+          2,
+          1,
+          1,
+          0,
+          0
+        ]
+      },
+      {
+        "test_index": 1,
+        "passed": true,
+        "actual": [
+          1,
+          1,
+          1,
+          0
+        ],
+        "expected": [
+          1,
+          1,
+          1,
+          0
+        ]
+      },
+      {
+        "test_index": 2,
+        "passed": true,
+        "actual": [
+          1,
+          1,
+          0
+        ],
+        "expected": [
+          1,
+          1,
+          0
+        ]
+      },
+      {
+        "test_index": 3,
+        "passed": true,
+        "actual": [
+          8,
+          1,
+          5,
+          4,
+          3,
+          2,
+          1,
+          1,
+          0,
+          0
+        ],
+        "expected": [
+          8,
+          1,
+          5,
+          4,
+          3,
+          2,
+          1,
+          1,
+          0,
+          0
+        ]
+      },
+      {
+        "test_index": 4,
+        "passed": true,
+        "actual": [
+          0
+        ],
+        "expected": [
+          0
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,932 @@
+[
+  {
+    "problem_id": "two_sum",
+    "problem_title": "Two Sum",
+    "difficulty": "Easy",
+    "topic": "array",
+    "strategy": "baseline",
+    "passed": true,
+    "failure_category": null,
+    "latency_seconds": 6.91,
+    "tokens_used": 627,
+    "prompt_tokens": 447,
+    "completion_tokens": 180,
+    "extracted_code": "def two_sum(nums: list[int], target: int) -> list[int]:\n    \"\"\"\n    Find two indices such that nums[i] + nums[j] == target.\n    Indices are returned in ascending order and each element is used at most once.\n    \"\"\"\n    seen = {}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in seen:\n            j = seen[complement]\n            return [j, i] if j < i else [i, j]\n        seen[num] = i\n    raise ValueError(\"No two-sum solution found\")",
+    "raw_response": "```python\ndef two_sum(nums: list[int], target: int) -> list[int]:\n    \"\"\"\n    Find two indices such that nums[i] + nums[j] == target.\n    Indices are returned in ascending order and each element is used at most once.\n    \"\"\"\n    seen = {}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in seen:\n            j = seen[complement]\n            return [j, i] if j < i else [i, j]\n        seen[num] = i\n    raise ValueError(\"No two-sum solution found\")\n```",
+    "error_message": null,
+    "test_outcomes": [
+      {
+        "test_index": 0,
+        "passed": true,
+        "actual": [
+          0,
+          1
+        ],
+        "expected": [
+          0,
+          1
+        ]
+      },
+      {
+        "test_index": 1,
+        "passed": true,
+        "actual": [
+          1,
+          2
+        ],
+        "expected": [
+          1,
+          2
+        ]
+      },
+      {
+        "test_index": 2,
+        "passed": true,
+        "actual": [
+          0,
+          1
+        ],
+        "expected": [
+          0,
+          1
+        ]
+      },
+      {
+        "test_index": 3,
+        "passed": true,
+        "actual": [
+          2,
+          4
+        ],
+        "expected": [
+          2,
+          4
+        ]
+      },
+      {
+        "test_index": 4,
+        "passed": true,
+        "actual": [
+          0,
+          3
+        ],
+        "expected": [
+          0,
+          3
+        ]
+      }
+    ]
+  },
+  {
+    "problem_id": "valid_parentheses",
+    "problem_title": "Valid Parentheses",
+    "difficulty": "Easy",
+    "topic": "stack",
+    "strategy": "baseline",
+    "passed": true,
+    "failure_category": null,
+    "latency_seconds": 7.937,
+    "tokens_used": 724,
+    "prompt_tokens": 446,
+    "completion_tokens": 278,
+    "extracted_code": "def is_valid_parentheses(s: str) -> bool:\n    stack = []\n    pairs = {')': '(', ']': '[', '}': '{'}\n    opens = set(pairs.values())\n    for char in s:\n        if char in opens:\n            stack.append(char)\n        elif char in pairs:\n            if not stack or stack.pop() != pairs[char]:\n                return False\n        else:\n            # ignore any other characters (though per spec there shouldn't be any)\n            pass\n    return not stack",
+    "raw_response": "```python\ndef is_valid_parentheses(s: str) -> bool:\n    stack = []\n    pairs = {')': '(', ']': '[', '}': '{'}\n    opens = set(pairs.values())\n    for char in s:\n        if char in opens:\n            stack.append(char)\n        elif char in pairs:\n            if not stack or stack.pop() != pairs[char]:\n                return False\n        else:\n            # ignore any other characters (though per spec there shouldn't be any)\n            pass\n    return not stack\n```",
+    "error_message": null,
+    "test_outcomes": [
+      {
+        "test_index": 0,
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "test_index": 1,
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "test_index": 2,
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "test_index": 3,
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "test_index": 4,
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "test_index": 5,
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "test_index": 6,
+        "passed": true,
+        "actual": true,
+        "expected": true
+      }
+    ]
+  },
+  {
+    "problem_id": "best_time_to_buy_and_sell_stock",
+    "problem_title": "Best Time to Buy and Sell Stock",
+    "difficulty": "Easy",
+    "topic": "array",
+    "strategy": "baseline",
+    "passed": true,
+    "failure_category": null,
+    "latency_seconds": 7.961,
+    "tokens_used": 604,
+    "prompt_tokens": 458,
+    "completion_tokens": 146,
+    "extracted_code": "def max_profit(prices: list[int]) -> int:\n    if not prices:\n        return 0\n    min_price = prices[0]\n    max_profit_val = 0\n    for price in prices[1:]:\n        if price < min_price:\n            min_price = price\n        else:\n            profit = price - min_price\n            if profit > max_profit_val:\n                max_profit_val = profit\n    return max_profit_val",
+    "raw_response": "```python\ndef max_profit(prices: list[int]) -> int:\n    if not prices:\n        return 0\n    min_price = prices[0]\n    max_profit_val = 0\n    for price in prices[1:]:\n        if price < min_price:\n            min_price = price\n        else:\n            profit = price - min_price\n            if profit > max_profit_val:\n                max_profit_val = profit\n    return max_profit_val\n```",
+    "error_message": null,
+    "test_outcomes": [
+      {
+        "test_index": 0,
+        "passed": true,
+        "actual": 5,
+        "expected": 5
+      },
+      {
+        "test_index": 1,
+        "passed": true,
+        "actual": 0,
+        "expected": 0
+      },
+      {
+        "test_index": 2,
+        "passed": true,
+        "actual": 4,
+        "expected": 4
+      },
+      {
+        "test_index": 3,
+        "passed": true,
+        "actual": 2,
+        "expected": 2
+      },
+      {
+        "test_index": 4,
+        "passed": true,
+        "actual": 0,
+        "expected": 0
+      }
+    ]
+  },
+  {
+    "problem_id": "valid_anagram",
+    "problem_title": "Valid Anagram",
+    "difficulty": "Easy",
+    "topic": "string",
+    "strategy": "baseline",
+    "passed": true,
+    "failure_category": null,
+    "latency_seconds": 8.302,
+    "tokens_used": 669,
+    "prompt_tokens": 437,
+    "completion_tokens": 232,
+    "extracted_code": "def is_anagram(s: str, t: str) -> bool:\n    \"\"\"Return True if t is an anagram of s, False otherwise.\"\"\"\n    if len(s) != len(t):\n        return False\n    # Count characters in both strings\n    count = {}\n    for ch in s:\n        count[ch] = count.get(ch, 0) + 1\n    for ch in t:\n        if ch not in count:\n            return False\n        count[ch] -= 1\n        if count[ch] < 0:\n            return False\n    return True",
+    "raw_response": "```python\ndef is_anagram(s: str, t: str) -> bool:\n    \"\"\"Return True if t is an anagram of s, False otherwise.\"\"\"\n    if len(s) != len(t):\n        return False\n    # Count characters in both strings\n    count = {}\n    for ch in s:\n        count[ch] = count.get(ch, 0) + 1\n    for ch in t:\n        if ch not in count:\n            return False\n        count[ch] -= 1\n        if count[ch] < 0:\n            return False\n    return True\n```\n",
+    "error_message": null,
+    "test_outcomes": [
+      {
+        "test_index": 0,
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "test_index": 1,
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "test_index": 2,
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "test_index": 3,
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "test_index": 4,
+        "passed": true,
+        "actual": true,
+        "expected": true
+      }
+    ]
+  },
+  {
+    "problem_id": "valid_palindrome",
+    "problem_title": "Valid Palindrome",
+    "difficulty": "Easy",
+    "topic": "two-pointer",
+    "strategy": "baseline",
+    "passed": true,
+    "failure_category": null,
+    "latency_seconds": 8.53,
+    "tokens_used": 693,
+    "prompt_tokens": 437,
+    "completion_tokens": 256,
+    "extracted_code": "def is_palindrome(s: str) -> bool:\n    left, right = 0, len(s) - 1\n    while left < right:\n        while left < right and not s[left].isalnum():\n            left += 1\n        while left < right and not s[right].isalnum():\n            right -= 1\n        if left < right:\n            if s[left].lower() != s[right].lower():\n                return False\n            left += 1\n            right -= 1\n    return True",
+    "raw_response": "```python\ndef is_palindrome(s: str) -> bool:\n    left, right = 0, len(s) - 1\n    while left < right:\n        while left < right and not s[left].isalnum():\n            left += 1\n        while left < right and not s[right].isalnum():\n            right -= 1\n        if left < right:\n            if s[left].lower() != s[right].lower():\n                return False\n            left += 1\n            right -= 1\n    return True\n```",
+    "error_message": null,
+    "test_outcomes": [
+      {
+        "test_index": 0,
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "test_index": 1,
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "test_index": 2,
+        "passed": true,
+        "actual": true,
+        "expected": true
+      },
+      {
+        "test_index": 3,
+        "passed": true,
+        "actual": false,
+        "expected": false
+      },
+      {
+        "test_index": 4,
+        "passed": true,
+        "actual": true,
+        "expected": true
+      }
+    ]
+  },
+  {
+    "problem_id": "maximum_subarray",
+    "problem_title": "Maximum Subarray",
+    "difficulty": "Medium",
+    "topic": "array",
+    "strategy": "baseline",
+    "passed": true,
+    "failure_category": null,
+    "latency_seconds": 8.319,
+    "tokens_used": 577,
+    "prompt_tokens": 417,
+    "completion_tokens": 160,
+    "extracted_code": "def max_sub_array(nums: list[int]) -> int:\n    # Kadane's algorithm: iterate and keep track of current sum and max sum.\n    best = current = nums[0]\n    for x in nums[1:]:\n        current = max(x, current + x)\n        best = max(best, current)\n    return best",
+    "raw_response": "```python\ndef max_sub_array(nums: list[int]) -> int:\n    # Kadane's algorithm: iterate and keep track of current sum and max sum.\n    best = current = nums[0]\n    for x in nums[1:]:\n        current = max(x, current + x)\n        best = max(best, current)\n    return best\n```",
+    "error_message": null,
+    "test_outcomes": [
+      {
+        "test_index": 0,
+        "passed": true,
+        "actual": 6,
+        "expected": 6
+      },
+      {
+        "test_index": 1,
+        "passed": true,
+        "actual": 1,
+        "expected": 1
+      },
+      {
+        "test_index": 2,
+        "passed": true,
+        "actual": 23,
+        "expected": 23
+      },
+      {
+        "test_index": 3,
+        "passed": true,
+        "actual": -1,
+        "expected": -1
+      },
+      {
+        "test_index": 4,
+        "passed": true,
+        "actual": -1,
+        "expected": -1
+      }
+    ]
+  },
+  {
+    "problem_id": "merge_intervals",
+    "problem_title": "Merge Intervals",
+    "difficulty": "Medium",
+    "topic": "array",
+    "strategy": "baseline",
+    "passed": true,
+    "failure_category": null,
+    "latency_seconds": 10.398,
+    "tokens_used": 701,
+    "prompt_tokens": 441,
+    "completion_tokens": 260,
+    "extracted_code": "def merge_intervals(intervals: list[list[int]]) -> list[list[int]]:\n    \"\"\"\n    Merge all overlapping intervals in the input list.\n\n    Args:\n        intervals: A list of intervals, each represented as a list [start, end].\n\n    Returns:\n        A list of merged, non-overlapping intervals sorted by start time.\n    \"\"\"\n    if not intervals:\n        return []\n\n    # Sort intervals by their start times\n    intervals.sort(key=lambda x: x[0])\n\n    merged = [intervals[0]]\n    for current in intervals[1:]:\n        last = merged[-1]\n        # If intervals overlap or touch, merge them\n        if current[0] <= last[1]:\n            last[1] = max(last[1], current[1])\n        else:\n            merged.append(current)\n    return merged",
+    "raw_response": "```python\ndef merge_intervals(intervals: list[list[int]]) -> list[list[int]]:\n    \"\"\"\n    Merge all overlapping intervals in the input list.\n\n    Args:\n        intervals: A list of intervals, each represented as a list [start, end].\n\n    Returns:\n        A list of merged, non-overlapping intervals sorted by start time.\n    \"\"\"\n    if not intervals:\n        return []\n\n    # Sort intervals by their start times\n    intervals.sort(key=lambda x: x[0])\n\n    merged = [intervals[0]]\n    for current in intervals[1:]:\n        last = merged[-1]\n        # If intervals overlap or touch, merge them\n        if current[0] <= last[1]:\n            last[1] = max(last[1], current[1])\n        else:\n            merged.append(current)\n    return merged\n```",
+    "error_message": null,
+    "test_outcomes": [
+      {
+        "test_index": 0,
+        "passed": true,
+        "actual": [
+          [
+            1,
+            6
+          ],
+          [
+            8,
+            10
+          ],
+          [
+            15,
+            18
+          ]
+        ],
+        "expected": [
+          [
+            1,
+            6
+          ],
+          [
+            8,
+            10
+          ],
+          [
+            15,
+            18
+          ]
+        ]
+      },
+      {
+        "test_index": 1,
+        "passed": true,
+        "actual": [
+          [
+            1,
+            5
+          ]
+        ],
+        "expected": [
+          [
+            1,
+            5
+          ]
+        ]
+      },
+      {
+        "test_index": 2,
+        "passed": true,
+        "actual": [
+          [
+            0,
+            4
+          ]
+        ],
+        "expected": [
+          [
+            0,
+            4
+          ]
+        ]
+      },
+      {
+        "test_index": 3,
+        "passed": true,
+        "actual": [
+          [
+            1,
+            4
+          ]
+        ],
+        "expected": [
+          [
+            1,
+            4
+          ]
+        ]
+      },
+      {
+        "test_index": 4,
+        "passed": true,
+        "actual": [
+          [
+            1,
+            9
+          ]
+        ],
+        "expected": [
+          [
+            1,
+            9
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "problem_id": "product_of_array_except_self",
+    "problem_title": "Product of Array Except Self",
+    "difficulty": "Medium",
+    "topic": "array",
+    "strategy": "baseline",
+    "passed": true,
+    "failure_category": null,
+    "latency_seconds": 25.19,
+    "tokens_used": 713,
+    "prompt_tokens": 452,
+    "completion_tokens": 261,
+    "extracted_code": "def product_except_self(nums: list[int]) -> list[int]:\n    n = len(nums)\n    if n == 0:\n        return []\n\n    # left[i] is product of all elements before i\n    left = [1] * n\n    for i in range(1, n):\n        left[i] = left[i - 1] * nums[i - 1]\n\n    # right product on the fly, result[i] = left[i] * right\n    result = [0] * n\n    right = 1\n    for i in range(n - 1, -1, -1):\n        result[i] = left[i] * right\n        right *= nums[i]\n    return result",
+    "raw_response": "```python\ndef product_except_self(nums: list[int]) -> list[int]:\n    n = len(nums)\n    if n == 0:\n        return []\n\n    # left[i] is product of all elements before i\n    left = [1] * n\n    for i in range(1, n):\n        left[i] = left[i - 1] * nums[i - 1]\n\n    # right product on the fly, result[i] = left[i] * right\n    result = [0] * n\n    right = 1\n    for i in range(n - 1, -1, -1):\n        result[i] = left[i] * right\n        right *= nums[i]\n    return result\n```",
+    "error_message": null,
+    "test_outcomes": [
+      {
+        "test_index": 0,
+        "passed": true,
+        "actual": [
+          24,
+          12,
+          8,
+          6
+        ],
+        "expected": [
+          24,
+          12,
+          8,
+          6
+        ]
+      },
+      {
+        "test_index": 1,
+        "passed": true,
+        "actual": [
+          0,
+          0,
+          9,
+          0,
+          0
+        ],
+        "expected": [
+          0,
+          0,
+          9,
+          0,
+          0
+        ]
+      },
+      {
+        "test_index": 2,
+        "passed": true,
+        "actual": [
+          3,
+          2
+        ],
+        "expected": [
+          3,
+          2
+        ]
+      },
+      {
+        "test_index": 3,
+        "passed": true,
+        "actual": [
+          0,
+          0
+        ],
+        "expected": [
+          0,
+          0
+        ]
+      },
+      {
+        "test_index": 4,
+        "passed": true,
+        "actual": [
+          -1,
+          1
+        ],
+        "expected": [
+          -1,
+          1
+        ]
+      }
+    ]
+  },
+  {
+    "problem_id": "longest_consecutive_sequence",
+    "problem_title": "Longest Consecutive Sequence",
+    "difficulty": "Medium",
+    "topic": "hashmap",
+    "strategy": "baseline",
+    "passed": true,
+    "failure_category": null,
+    "latency_seconds": 9.058,
+    "tokens_used": 780,
+    "prompt_tokens": 417,
+    "completion_tokens": 363,
+    "extracted_code": "def longest_consecutive(nums: list[int]) -> int:\n    num_set = set(nums)\n    best = 0\n    for x in num_set:\n        if x - 1 not in num_set:  # start of a sequence\n            cur = x\n            length = 1\n            while cur + 1 in num_set:\n                cur += 1\n                length += 1\n            best = max(best, length)\n    return best",
+    "raw_response": "```python\ndef longest_consecutive(nums: list[int]) -> int:\n    num_set = set(nums)\n    best = 0\n    for x in num_set:\n        if x - 1 not in num_set:  # start of a sequence\n            cur = x\n            length = 1\n            while cur + 1 in num_set:\n                cur += 1\n                length += 1\n            best = max(best, length)\n    return best\n```",
+    "error_message": null,
+    "test_outcomes": [
+      {
+        "test_index": 0,
+        "passed": true,
+        "actual": 4,
+        "expected": 4
+      },
+      {
+        "test_index": 1,
+        "passed": true,
+        "actual": 9,
+        "expected": 9
+      },
+      {
+        "test_index": 2,
+        "passed": true,
+        "actual": 0,
+        "expected": 0
+      },
+      {
+        "test_index": 3,
+        "passed": true,
+        "actual": 7,
+        "expected": 7
+      },
+      {
+        "test_index": 4,
+        "passed": true,
+        "actual": 3,
+        "expected": 3
+      }
+    ]
+  },
+  {
+    "problem_id": "subarray_sum_equals_k",
+    "problem_title": "Subarray Sum Equals K",
+    "difficulty": "Medium",
+    "topic": "hashmap",
+    "strategy": "baseline",
+    "passed": true,
+    "failure_category": null,
+    "latency_seconds": 56.752,
+    "tokens_used": 691,
+    "prompt_tokens": 427,
+    "completion_tokens": 264,
+    "extracted_code": "from typing import List, Dict\n\ndef subarray_sum(nums: List[int], k: int) -> int:\n    count = 0\n    prefix_sum = 0\n    freq: Dict[int, int] = {0: 1}\n    for num in nums:\n        prefix_sum += num\n        target = prefix_sum - k\n        count += freq.get(target, 0)\n        freq[prefix_sum] = freq.get(prefix_sum, 0) + 1\n    return count",
+    "raw_response": "```python\nfrom typing import List, Dict\n\ndef subarray_sum(nums: List[int], k: int) -> int:\n    count = 0\n    prefix_sum = 0\n    freq: Dict[int, int] = {0: 1}\n    for num in nums:\n        prefix_sum += num\n        target = prefix_sum - k\n        count += freq.get(target, 0)\n        freq[prefix_sum] = freq.get(prefix_sum, 0) + 1\n    return count\n```",
+    "error_message": null,
+    "test_outcomes": [
+      {
+        "test_index": 0,
+        "passed": true,
+        "actual": 2,
+        "expected": 2
+      },
+      {
+        "test_index": 1,
+        "passed": true,
+        "actual": 2,
+        "expected": 2
+      },
+      {
+        "test_index": 2,
+        "passed": true,
+        "actual": 3,
+        "expected": 3
+      },
+      {
+        "test_index": 3,
+        "passed": true,
+        "actual": 1,
+        "expected": 1
+      },
+      {
+        "test_index": 4,
+        "passed": true,
+        "actual": 4,
+        "expected": 4
+      }
+    ]
+  },
+  {
+    "problem_id": "container_with_most_water",
+    "problem_title": "Container With Most Water",
+    "difficulty": "Medium",
+    "topic": "two-pointer",
+    "strategy": "baseline",
+    "passed": true,
+    "failure_category": null,
+    "latency_seconds": 7.982,
+    "tokens_used": 612,
+    "prompt_tokens": 455,
+    "completion_tokens": 157,
+    "extracted_code": "def max_area(height: list[int]) -> int:\n    left, right = 0, len(height) - 1\n    max_water = 0\n    while left < right:\n        width = right - left\n        water = width * min(height[left], height[right])\n        if water > max_water:\n            max_water = water\n        if height[left] < height[right]:\n            left += 1\n        else:\n            right -= 1\n    return max_water",
+    "raw_response": "```python\ndef max_area(height: list[int]) -> int:\n    left, right = 0, len(height) - 1\n    max_water = 0\n    while left < right:\n        width = right - left\n        water = width * min(height[left], height[right])\n        if water > max_water:\n            max_water = water\n        if height[left] < height[right]:\n            left += 1\n        else:\n            right -= 1\n    return max_water\n```",
+    "error_message": null,
+    "test_outcomes": [
+      {
+        "test_index": 0,
+        "passed": true,
+        "actual": 49,
+        "expected": 49
+      },
+      {
+        "test_index": 1,
+        "passed": true,
+        "actual": 1,
+        "expected": 1
+      },
+      {
+        "test_index": 2,
+        "passed": true,
+        "actual": 16,
+        "expected": 16
+      },
+      {
+        "test_index": 3,
+        "passed": true,
+        "actual": 2,
+        "expected": 2
+      },
+      {
+        "test_index": 4,
+        "passed": true,
+        "actual": 17,
+        "expected": 17
+      }
+    ]
+  },
+  {
+    "problem_id": "trapping_rain_water",
+    "problem_title": "Trapping Rain Water",
+    "difficulty": "Hard",
+    "topic": "two-pointer",
+    "strategy": "baseline",
+    "passed": true,
+    "failure_category": null,
+    "latency_seconds": 8.929,
+    "tokens_used": 641,
+    "prompt_tokens": 410,
+    "completion_tokens": 231,
+    "extracted_code": "def trap(height: list[int]) -> int:\n    if not height:\n        return 0\n    left, right = 0, len(height) - 1\n    max_left, max_right = height[left], height[right]\n    water = 0\n    while left < right:\n        if max_left <= max_right:\n            left += 1\n            max_left = max(max_left, height[left])\n            water += max_left - height[left]\n        else:\n            right -= 1\n            max_right = max(max_right, height[right])\n            water += max_right - height[right]\n    return water",
+    "raw_response": "```python\ndef trap(height: list[int]) -> int:\n    if not height:\n        return 0\n    left, right = 0, len(height) - 1\n    max_left, max_right = height[left], height[right]\n    water = 0\n    while left < right:\n        if max_left <= max_right:\n            left += 1\n            max_left = max(max_left, height[left])\n            water += max_left - height[left]\n        else:\n            right -= 1\n            max_right = max(max_right, height[right])\n            water += max_right - height[right]\n    return water\n```",
+    "error_message": null,
+    "test_outcomes": [
+      {
+        "test_index": 0,
+        "passed": true,
+        "actual": 6,
+        "expected": 6
+      },
+      {
+        "test_index": 1,
+        "passed": true,
+        "actual": 9,
+        "expected": 9
+      },
+      {
+        "test_index": 2,
+        "passed": true,
+        "actual": 1,
+        "expected": 1
+      },
+      {
+        "test_index": 3,
+        "passed": true,
+        "actual": 2,
+        "expected": 2
+      },
+      {
+        "test_index": 4,
+        "passed": true,
+        "actual": 1,
+        "expected": 1
+      }
+    ]
+  },
+  {
+    "problem_id": "longest_substring_without_repeating_characters",
+    "problem_title": "Longest Substring Without Repeating Characters",
+    "difficulty": "Medium",
+    "topic": "string",
+    "strategy": "baseline",
+    "passed": true,
+    "failure_category": null,
+    "latency_seconds": 7.757,
+    "tokens_used": 626,
+    "prompt_tokens": 405,
+    "completion_tokens": 221,
+    "extracted_code": "def length_of_longest_substring(s: str) -> int:\n    char_index = {}\n    max_len = 0\n    left = 0\n    for right, char in enumerate(s):\n        if char in char_index and char_index[char] >= left:\n            left = char_index[char] + 1\n        char_index[char] = right\n        current_len = right - left + 1\n        if current_len > max_len:\n            max_len = current_len\n    return max_len",
+    "raw_response": "```python\ndef length_of_longest_substring(s: str) -> int:\n    char_index = {}\n    max_len = 0\n    left = 0\n    for right, char in enumerate(s):\n        if char in char_index and char_index[char] >= left:\n            left = char_index[char] + 1\n        char_index[char] = right\n        current_len = right - left + 1\n        if current_len > max_len:\n            max_len = current_len\n    return max_len\n```",
+    "error_message": null,
+    "test_outcomes": [
+      {
+        "test_index": 0,
+        "passed": true,
+        "actual": 3,
+        "expected": 3
+      },
+      {
+        "test_index": 1,
+        "passed": true,
+        "actual": 1,
+        "expected": 1
+      },
+      {
+        "test_index": 2,
+        "passed": true,
+        "actual": 3,
+        "expected": 3
+      },
+      {
+        "test_index": 3,
+        "passed": true,
+        "actual": 0,
+        "expected": 0
+      },
+      {
+        "test_index": 4,
+        "passed": true,
+        "actual": 3,
+        "expected": 3
+      }
+    ]
+  },
+  {
+    "problem_id": "eval_rpn",
+    "problem_title": "Evaluate Reverse Polish Notation",
+    "difficulty": "Medium",
+    "topic": "stack",
+    "strategy": "baseline",
+    "passed": true,
+    "failure_category": null,
+    "latency_seconds": 10.828,
+    "tokens_used": 766,
+    "prompt_tokens": 447,
+    "completion_tokens": 319,
+    "extracted_code": "def eval_rpn(tokens: list[str]) -> int:\n    stack = []\n    for token in tokens:\n        if token in {\"+\", \"-\", \"*\", \"/\"}:\n            b = stack.pop()\n            a = stack.pop()\n            if token == \"+\":\n                stack.append(a + b)\n            elif token == \"-\":\n                stack.append(a - b)\n            elif token == \"*\":\n                stack.append(a * b)\n            else:  # '/'\n                stack.append(int(a / b))\n        else:\n            stack.append(int(token))\n    return stack[0]",
+    "raw_response": "```python\ndef eval_rpn(tokens: list[str]) -> int:\n    stack = []\n    for token in tokens:\n        if token in {\"+\", \"-\", \"*\", \"/\"}:\n            b = stack.pop()\n            a = stack.pop()\n            if token == \"+\":\n                stack.append(a + b)\n            elif token == \"-\":\n                stack.append(a - b)\n            elif token == \"*\":\n                stack.append(a * b)\n            else:  # '/'\n                stack.append(int(a / b))\n        else:\n            stack.append(int(token))\n    return stack[0]\n```",
+    "error_message": null,
+    "test_outcomes": [
+      {
+        "test_index": 0,
+        "passed": true,
+        "actual": 9,
+        "expected": 9
+      },
+      {
+        "test_index": 1,
+        "passed": true,
+        "actual": 6,
+        "expected": 6
+      },
+      {
+        "test_index": 2,
+        "passed": true,
+        "actual": 22,
+        "expected": 22
+      },
+      {
+        "test_index": 3,
+        "passed": true,
+        "actual": -1,
+        "expected": -1
+      },
+      {
+        "test_index": 4,
+        "passed": true,
+        "actual": -7,
+        "expected": -7
+      }
+    ]
+  },
+  {
+    "problem_id": "daily_temperatures",
+    "problem_title": "Daily Temperatures",
+    "difficulty": "Medium",
+    "topic": "stack",
+    "strategy": "baseline",
+    "passed": true,
+    "failure_category": null,
+    "latency_seconds": 8.242,
+    "tokens_used": 632,
+    "prompt_tokens": 446,
+    "completion_tokens": 186,
+    "extracted_code": "def daily_temperatures(temperatures: list[int]) -> list[int]:\n    n = len(temperatures)\n    answer = [0] * n\n    stack = []  # indices of temperatures waiting for a warmer day\n    for today, temp in enumerate(temperatures):\n        while stack and temp > temperatures[stack[-1]]:\n            prev = stack.pop()\n            answer[prev] = today - prev\n        stack.append(today)\n    return answer",
+    "raw_response": "```python\ndef daily_temperatures(temperatures: list[int]) -> list[int]:\n    n = len(temperatures)\n    answer = [0] * n\n    stack = []  # indices of temperatures waiting for a warmer day\n    for today, temp in enumerate(temperatures):\n        while stack and temp > temperatures[stack[-1]]:\n            prev = stack.pop()\n            answer[prev] = today - prev\n        stack.append(today)\n    return answer\n```",
+    "error_message": null,
+    "test_outcomes": [
+      {
+        "test_index": 0,
+        "passed": true,
+        "actual": [
+          1,
+          1,
+          4,
+          2,
+          1,
+          1,
+          0,
+          0
+        ],
+        "expected": [
+          1,
+          1,
+          4,
+          2,
+          1,
+          1,
+          0,
+          0
+        ]
+      },
+      {
+        "test_index": 1,
+        "passed": true,
+        "actual": [
+          1,
+          1,
+          1,
+          0
+        ],
+        "expected": [
+          1,
+          1,
+          1,
+          0
+        ]
+      },
+      {
+        "test_index": 2,
+        "passed": true,
+        "actual": [
+          1,
+          1,
+          0
+        ],
+        "expected": [
+          1,
+          1,
+          0
+        ]
+      },
+      {
+        "test_index": 3,
+        "passed": true,
+        "actual": [
+          8,
+          1,
+          5,
+          4,
+          3,
+          2,
+          1,
+          1,
+          0,
+          0
+        ],
+        "expected": [
+          8,
+          1,
+          5,
+          4,
+          3,
+          2,
+          1,
+          1,
+          0,
+          0
+        ]
+      },
+      {
+        "test_index": 4,
+        "passed": true,
+        "actual": [
+          0
+        ],
+        "expected": [
+          0
+        ]
+      }
+    ]
+  }
+]

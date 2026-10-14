@@ -1,0 +1,31 @@
+problem_id,problem_title,difficulty,topic,strategy,passed,failure_category,latency_seconds,tokens_used,prompt_tokens,completion_tokens
+two_sum,Two Sum,Easy,array,baseline,True,,6.91,627,447,180
+valid_parentheses,Valid Parentheses,Easy,stack,baseline,True,,7.937,724,446,278
+best_time_to_buy_and_sell_stock,Best Time to Buy and Sell Stock,Easy,array,baseline,True,,7.961,604,458,146
+valid_anagram,Valid Anagram,Easy,string,baseline,True,,8.302,669,437,232
+valid_palindrome,Valid Palindrome,Easy,two-pointer,baseline,True,,8.53,693,437,256
+maximum_subarray,Maximum Subarray,Medium,array,baseline,True,,8.319,577,417,160
+merge_intervals,Merge Intervals,Medium,array,baseline,True,,10.398,701,441,260
+product_of_array_except_self,Product of Array Except Self,Medium,array,baseline,True,,25.19,713,452,261
+longest_consecutive_sequence,Longest Consecutive Sequence,Medium,hashmap,baseline,True,,9.058,780,417,363
+subarray_sum_equals_k,Subarray Sum Equals K,Medium,hashmap,baseline,True,,56.752,691,427,264
+container_with_most_water,Container With Most Water,Medium,two-pointer,baseline,True,,7.982,612,455,157
+trapping_rain_water,Trapping Rain Water,Hard,two-pointer,baseline,True,,8.929,641,410,231
+longest_substring_without_repeating_characters,Longest Substring Without Repeating Characters,Medium,string,baseline,True,,7.757,626,405,221
+eval_rpn,Evaluate Reverse Polish Notation,Medium,stack,baseline,True,,10.828,766,447,319
+daily_temperatures,Daily Temperatures,Medium,stack,baseline,True,,8.242,632,446,186
+two_sum,Two Sum,Easy,array,cot,True,,33.04,1209,461,748
+valid_parentheses,Valid Parentheses,Easy,stack,cot,True,,12.944,1003,460,543
+best_time_to_buy_and_sell_stock,Best Time to Buy and Sell Stock,Easy,array,cot,True,,16.883,1161,472,689
+valid_anagram,Valid Anagram,Easy,string,cot,True,,11.389,1009,451,558
+valid_palindrome,Valid Palindrome,Easy,two-pointer,cot,True,,18.475,1168,451,717
+maximum_subarray,Maximum Subarray,Medium,array,cot,True,,22.239,1333,431,902
+merge_intervals,Merge Intervals,Medium,array,cot,True,,19.759,1079,455,624
+product_of_array_except_self,Product of Array Except Self,Medium,array,cot,True,,24.0,1400,466,934
+longest_consecutive_sequence,Longest Consecutive Sequence,Medium,hashmap,cot,True,,30.638,1271,431,840
+subarray_sum_equals_k,Subarray Sum Equals K,Medium,hashmap,cot,True,,16.393,1163,441,722
+container_with_most_water,Container With Most Water,Medium,two-pointer,cot,True,,19.709,1249,469,780
+trapping_rain_water,Trapping Rain Water,Hard,two-pointer,cot,True,,17.709,1160,424,736
+longest_substring_without_repeating_characters,Longest Substring Without Repeating Characters,Medium,string,cot,True,,12.193,990,419,571
+eval_rpn,Evaluate Reverse Polish Notation,Medium,stack,cot,True,,18.457,1359,461,898
+daily_temperatures,Daily Temperatures,Medium,stack,cot,True,,21.212,1232,460,772
