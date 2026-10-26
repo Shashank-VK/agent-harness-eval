@@ -146,3 +146,14 @@ agent-harness-eval/
     ├── test_problems.py    # Problem JSON schema and test case tests
     └── test_report.py      # Metrics calculation and export tests
 ```
+
+## Architecture
+
+```mermaid
+flowchart LR
+    Tasks[15 tasks] --> Base[Baseline agent]
+    Tasks --> CoT[Chain-of-thought agent]
+    Base --> Compare[Compare accuracy, token cost, latency]
+    CoT --> Compare
+```
+
